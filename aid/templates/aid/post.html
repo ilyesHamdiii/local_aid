@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+{% extends "aid/base.html" %} {% block content %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Request - MutualAid</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .navbar {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 1rem 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #667eea;
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: #667eea;
+      }
+
+      .auth-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: #667eea;
+        border: 2px solid #667eea;
+      }
+
+      .btn-outline:hover {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .main-content {
+        margin-top: 90px;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        margin-bottom: 2rem;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .page-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+      }
+
+      .page-header p {
+        font-size: 1.1rem;
+        color: #666;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #333;
+      }
+
+      .form-group.required label::after {
+        content: " *";
+        color: #dc3545;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .form-help {
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 0.25rem;
+      }
+
+      .urgency-options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+
+      .urgency-option {
+        position: relative;
+      }
+
+      .urgency-option input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .urgency-option label {
+        display: block;
+        padding: 1rem;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 0;
+      }
+
+      .urgency-option input:checked + label {
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+      }
+
+      .urgency-low label {
+        border-left: 4px solid #28a745;
+      }
+      .urgency-medium label {
+        border-left: 4px solid #ffc107;
+      }
+      .urgency-high label {
+        border-left: 4px solid #dc3545;
+      }
+
+      .photo-upload {
+        border: 2px dashed #e1e5e9;
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        transition: border-color 0.3s ease;
+        cursor: pointer;
+      }
+
+      .photo-upload:hover {
+        border-color: #667eea;
+      }
+
+      .photo-upload.dragover {
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.1);
+      }
+
+      .photo-upload input {
+        display: none;
+      }
+
+      .photo-upload-icon {
+        font-size: 3rem;
+        color: #ccc;
+        margin-bottom: 1rem;
+      }
+
+      .photo-preview {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .photo-preview img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #e1e5e9;
+      }
+
+      .submit-section {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e1e5e9;
+      }
+
+      .submit-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+      }
+
+      .btn-large {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+      }
+
+      .btn-secondary {
+        background: #6c757d;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+      }
+
+      .privacy-notice {
+        background: rgba(102, 126, 234, 0.1);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      .privacy-notice strong {
+        color: #667eea;
+      }
+
+      @media (max-width: 768px) {
+        .form-card {
+          padding: 2rem;
+          margin: 1rem;
+          border-radius: 15px;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .urgency-options {
+          grid-template-columns: 1fr;
+        }
+
+        .submit-buttons {
+          flex-direction: column;
+        }
+
+        .btn-large {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="main-content">
+      <div class="container">
+        <div class="form-card">
+          <div class="page-header">
+            <h1>Post a Help Request</h1>
+            <p>
+              Share what you need help with and connect with neighbors willing
+              to assist
+            </p>
+          </div>
+
+          <div class="privacy-notice">
+            <strong>Privacy Notice:</strong> Your request will be visible to all
+            registered community members. Only share information you're
+            comfortable making public.
+          </div>
+
+          <form id="request-form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group required">
+              <label for="title">Request Title</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Brief, clear title for your request"
+                maxlength="100"
+                required
+              />
+              <div class="form-help">
+                Be specific but concise (e.g., "Help moving furniture" instead
+                of "Need help")
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group required">
+                <label for="category">Category</label>
+                <select id="category" name="category" required>
+                  <option value="">Select a category</option>
+                  <option value="errands">Errands & Shopping</option>
+                  <option value="moving">Moving & Transportation</option>
+                  <option value="pet-care">Pet Care</option>
+                  <option value="tech">Tech Support</option>
+                  <option value="food">Food & Meals</option>
+                  <option value="childcare">Childcare</option>
+                  <option value="home">Home & Garden</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group required">
+                <label for="location">Location</label>
+                <select id="location" name="location" required>
+                  <option value="">Select your area</option>
+                  <option value="downtown">Downtown</option>
+                  <option value="riverside">Riverside District</option>
+                  <option value="oak-street">Oak Street</option>
+                  <option value="hillside">Hillside</option>
+                  <option value="market-square">Market Square</option>
+                  <option value="westside">Westside</option>
+                  <option value="eastend">East End</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group required">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Describe what you need help with, when, and any important details..."
+                required
+              ></textarea>
+              <div class="form-help">
+                Include specific details like timing, duration, skills needed,
+                or items involved
+              </div>
+            </div>
+
+            <div class="form-group required">
+              <label>Urgency Level</label>
+              <div class="urgency-options">
+                <div class="urgency-option urgency-low">
+                  <input
+                    type="radio"
+                    id="urgency-low"
+                    name="urgency"
+                    value="low"
+                    required
+                  />
+                  <label for="urgency-low">
+                    <strong>Low</strong><br />
+                    <small>Can wait a few days</small>
+                  </label>
+                </div>
+                <div class="urgency-option urgency-medium">
+                  <input
+                    type="radio"
+                    id="urgency-medium"
+                    name="urgency"
+                    value="medium"
+                    required
+                  />
+                  <label for="urgency-medium">
+                    <strong>Medium</strong><br />
+                    <small>Needed within 1-2 days</small>
+                  </label>
+                </div>
+                <div class="urgency-option urgency-high">
+                  <input
+                    type="radio"
+                    id="urgency-high"
+                    name="urgency"
+                    value="high"
+                    required
+                  />
+                  <label for="urgency-high">
+                    <strong>High</strong><br />
+                    <small>Urgent, needed today</small>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="preferred-time">Preferred Time</label>
+                <input
+                  type="text"
+                  id="preferred-time"
+                  name="preferred-time"
+                  placeholder="e.g., Weekday evenings, Saturday morning"
+                />
+                <div class="form-help">When would be best for you?</div>
+              </div>
+
+              <div class="form-group">
+                <label for="duration">Estimated Duration</label>
+                <select id="duration" name="duration">
+                  <option value="">Select duration</option>
+                  <option value="30min">30 minutes</option>
+                  <option value="1hour">1 hour</option>
+                  <option value="2hours">2 hours</option>
+                  <option value="halfday">Half day</option>
+                  <option value="fullday">Full day</option>
+                  <option value="multiday">Multiple days</option>
+                  <option value="ongoing">Ongoing</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="compensation">Offer (Optional)</label>
+              <input
+                type="text"
+                id="compensation"
+                name="compensation"
+                placeholder="e.g., Home-baked cookies, $20, Trade for services"
+              />
+              <div class="form-help">
+                What can you offer in return? This could be money, food,
+                services, or just gratitude!
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Photos (Optional)</label>
+              <div class="photo-upload" id="photo-upload">
+                <input
+                  type="file"
+                  id="photos"
+                  name="photos"
+                  multiple
+                  accept="image/*"
+                />
+                <div class="photo-upload-icon">📷</div>
+                <p><strong>Click to upload photos</strong> or drag and drop</p>
+                <p class="form-help">
+                  Add photos to help people understand your request better
+                </p>
+              </div>
+              <div class="photo-preview" id="photo-preview"></div>
+            </div>
+
+            <div class="submit-section">
+              <div class="submit-buttons">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-large"
+                  onclick="window.history.back()"
+                >
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary btn-large">
+                  Post Request
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Form handling
+      const form = document.getElementById("request-form");
+      const photoUpload = document.getElementById("photo-upload");
+      const photoInput = document.getElementById("photos");
+      const photoPreview = document.getElementById("photo-preview");
+
+      // Photo upload functionality
+      photoUpload.addEventListener("click", () => photoInput.click());
+
+      photoUpload.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        photoUpload.classList.add("dragover");
+      });
+
+      photoUpload.addEventListener("dragleave", () => {
+        photoUpload.classList.remove("dragover");
+      });
+
+      photoUpload.addEventListener("drop", (e) => {
+        e.preventDefault();
+        photoUpload.classList.remove("dragover");
+        const files = e.dataTransfer.files;
+        handleFiles(files);
+      });
+
+      photoInput.addEventListener("change", (e) => {
+        handleFiles(e.target.files);
+      });
+
+      function handleFiles(files) {
+        photoPreview.innerHTML = "";
+        Array.from(files).forEach((file) => {
+          if (file.type.startsWith("image/")) {
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.onload = () => URL.revokeObjectURL(img.src);
+            photoPreview.appendChild(img);
+          }
+        });
+      }
+
+      // Form validation
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // Basic validation
+        if (
+          !data.title ||
+          !data.category ||
+          !data.location ||
+          !data.description ||
+          !data.urgency
+        ) {
+          alert("Please fill in all required fields.");
+          return;
+        }
+
+        if (data.title.length < 10) {
+          alert(
+            "Please provide a more descriptive title (at least 10 characters)."
+          );
+          return;
+        }
+
+        if (data.description.length < 20) {
+          alert(
+            "Please provide more details in the description (at least 20 characters)."
+          );
+          return;
+        }
+
+        // Simulate form submission
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Posting...";
+        submitButton.style.opacity = "0.7";
+
+        setTimeout(() => {
+          alert(
+            "Request posted successfully! You will be redirected to view your request."
+          );
+          window.location.href = "browse.html";
+        }, 2000);
+      });
+
+      // Character count for title
+      const titleInput = document.getElementById("title");
+      titleInput.addEventListener("input", () => {
+        const maxLength = 100;
+        const currentLength = titleInput.value.length;
+        const remaining = maxLength - currentLength;
+
+        let helpText = titleInput.nextElementSibling;
+        if (remaining < 20) {
+          helpText.textContent = `${remaining} characters remaining`;
+          helpText.style.color = remaining < 5 ? "#dc3545" : "#ffc107";
+        } else {
+          helpText.textContent =
+            'Be specific but concise (e.g., "Help moving furniture" instead of "Need help")';
+          helpText.style.color = "#666";
+        }
+      });
+
+      // Auto-resize textarea
+      const textarea = document.getElementById("description");
+      textarea.addEventListener("input", function () {
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
+      });
+
+      // Save draft functionality
+      function saveDraft() {
+        const formData = new FormData(form);
+        const draft = Object.fromEntries(formData.entries());
+        localStorage.setItem("mutualaid_draft", JSON.stringify(draft));
+      }
+
+      function loadDraft() {
+        const draft = localStorage.getItem("mutualaid_draft");
+        if (draft) {
+          const data = JSON.parse(draft);
+          Object.keys(data).forEach((key) => {
+            const field = form.querySelector(`[name="${key}"]`);
+            if (field) {
+              if (field.type === "radio") {
+                const radio = form.querySelector(
+                  `[name="${key}"][value="${data[key]}"]`
+                );
+                if (radio) radio.checked = true;
+              } else {
+                field.value = data[key];
+              }
+            }
+          });
+        }
+      }
+
+      // Auto-save draft every 30 seconds
+      setInterval(saveDraft, 30000);
+
+      // Save draft on input
+      form.addEventListener("input", saveDraft);
+
+      // Load draft on page load
+      window.addEventListener("load", loadDraft);
+
+      // Clear draft on successful submission
+      form.addEventListener("submit", () => {
+        localStorage.removeItem("mutualaid_draft");
+      });
+
+      // Warn about unsaved changes
+      let formChanged = false;
+      form.addEventListener("input", () => (formChanged = true));
+
+      window.addEventListener("beforeunload", (e) => {
+        if (formChanged) {
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      });
+    </script>
+  </body>
+  {% endblock %}
+</html>

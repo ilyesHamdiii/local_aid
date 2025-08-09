@@ -1,0 +1,4 @@
+.env
+local/__pycache__/
+aid/__pycache__/
+user/__pycache__/
