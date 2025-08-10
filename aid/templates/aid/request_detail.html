@@ -469,19 +469,19 @@
             <div class="breadcrumb">
                 <a href="home.html">Home</a> → 
                 <a href="browse.html">Browse Requests</a> → 
-                Help with grocery shopping
+                {{request.}}
             </div>
 
             <div class="request-detail">
                 <div class="request-main">
                     <div class="request-header">
-                        <div class="request-type">Errands</div>
+                        <div class="request-type">{{request.category}}</div>
                         <div class="urgency-indicator urgency-medium">
                             <div class="urgency-dot"></div>
-                            <span>Medium Urgency</span>
+                            <span>{{request.urgency}}</span>
                             <span class="status-badge status-open">Open</span>
                         </div>
-                        <h1 class="request-title">Help with grocery shopping</h1>
+                        <h1 class="request-title">{{request.title}}</h1>
                         <div class="request-meta">
                             <div class="meta-item">
                                 <span>🕐</span>
@@ -489,7 +489,7 @@
                             </div>
                             <div class="meta-item">
                                 <span>📍</span>
-                                <span>Downtown Area</span>
+                                <span>{{request.location}}</span>
                             </div>
                             <div class="meta-item">
                                 <span>👥</span>
@@ -499,11 +499,8 @@
                     </div>
 
                     <div class="request-description">
-                        <p>Looking for someone to help pick up groceries for an elderly neighbor who can't get out easily. Just basic items from the local supermarket - nothing heavy or complicated. The shopping list is pretty straightforward: bread, milk, eggs, some fresh vegetables, and a few pantry staples.</p>
-                        
-                        <p>Mrs. Johnson is 82 and has been having trouble getting around since her fall last month. She's such a sweet lady and has been a pillar of our community for years. This would mean the world to her and to me.</p>
-                        
-                        <p>The supermarket is just a 10-minute walk from her place, and I can provide the exact shopping list and money upfront. Should take about 30-45 minutes total.</p>
+                        <p>{{request.description}}</p>
+
                     </div>
 
                     <div class="request-details">
@@ -511,19 +508,19 @@
                         <div class="details-grid">
                             <div class="detail-item">
                                 <div class="detail-label">Preferred Time</div>
-                                <div class="detail-value">Weekday afternoons</div>
+                                <div class="detail-value">{{request.preferred_time}}</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Duration</div>
-                                <div class="detail-value">1 hour</div>
+                                <div class="detail-value">{{request.estimated_duration}}</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Compensation</div>
-                                <div class="detail-value">$15 + homemade cookies</div>
+                                <div class="detail-value">{{request.offer}}</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Skills Needed</div>
-                                <div class="detail-value">None - just kindness!</div>
+                                <div class="detail-value">{{request.skills}}</div>
                             </div>
                         </div>
                     </div>
@@ -531,8 +528,7 @@
                     <div class="request-photos">
                         <h3 style="margin-bottom: 1rem; color: #333;">Photos</h3>
                         <div class="photos-grid">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjhGOUZBIi8+CjxwYXRoIGQ9Ik0xMjAgODBMMTQwIDEwMEwxODAgNjBMMjIwIDEwMFYxNDBIMTIwVjgwWiIgZmlsbD0iI0RERERERiIvPgo8Y2lyY2xlIGN4PSIxMzAiIGN5PSI5MCIgcj0iMTAiIGZpbGw9IiNEREREREYiLz4KPHR5cGUgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTk5OTkiPgo8dGV4dCB4PSIxNTAiIHk9IjEwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U2hvcHBpbmcgTGlzdDwvdGV4dD4KPC90eXBlPgo8L3N2Zz4K" alt="Shopping list">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjhGOUZBIi8+CjxyZWN0IHg9IjYwIiB5PSI0MCIgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxMjAiIGZpbGw9IiNEREREREYiLz4KPHN2ZyB4PSI4MCIgeT0iNjAiIHdpZHRoPSIxNDAiIGhlaWdodD0iODAiPgo8dGV4dCB4PSI3MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjOTk5OTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TdXBlcm1hcmtldDwvdGV4dD4KPC9zdmc+CjxyZWN0IHg9IjkwIiB5PSI4MCIgd2lkdGg9IjEyMCIgaGVpZ2h0PSI0MCIgZmlsbD0iIzY2N0VFQSIvPgo8L3N2Zz4K" alt="Local supermarket">
+                            <img src="{{request.photo}}" alt="Shopping list">
                         </div>
                     </div>
 
@@ -587,15 +583,15 @@
                 <div class="request-sidebar">
                     <div class="action-card">
                         <h3>Offer to Help</h3>
-                        <p>Want to help Sarah with this request? Send a message to get started.</p>
+                        <p>Want to help {{request.author}} with this request? Send a message to get started.</p>
                         <button class="btn btn-primary btn-large" style="width: 100%;" onclick="showOfferModal()">Offer Your Help</button>
                     </div>
 
                     <div class="requester-info">
                         <h3 style="margin-bottom: 1rem;">Offer Your Help</h3>
-            <p style="margin-bottom: 1.5rem; color: #666;">Send a message to Sarah explaining how you can help with this request.</p>
+            <p style="margin-bottom: 1.5rem; color: #666;">Send a message to {{request.author}} explaining how you can help with this request.</p>
             <form id="offer-form">
-                <textarea placeholder="Hi Sarah! I'd love to help with your grocery shopping request..." style="width: 100%; min-height: 120px; padding: 1rem; border: 2px solid #e1e5e9; border-radius: 10px; margin-bottom: 1rem; font-family: inherit; resize: vertical;"></textarea>
+                <textarea placeholder="Hi {{request.author}} ! I'd love to help with your grocery shopping request..." style="width: 100%; min-height: 120px; padding: 1rem; border: 2px solid #e1e5e9; border-radius: 10px; margin-bottom: 1rem; font-family: inherit; resize: vertical;"></textarea>
                 <div style="display: flex; gap: 1rem; justify-content: flex-end;">
                     <button type="button" class="btn btn-outline" onclick="hideOfferModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Send Offer</button>
@@ -634,7 +630,7 @@
             submitBtn.textContent = 'Sending...';
             
             setTimeout(() => {
-                alert('Your offer has been sent to Sarah! They will be notified and can respond to you directly.');
+                alert('Your offer has been sent to {{request.author}}! They will be notified and can respond to you directly.');
                 hideOfferModal();
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
@@ -795,7 +791,7 @@
                         <div class="requester-profile">
                             <div class="requester-avatar">S</div>
                             <div class="requester-details">
-                                <h4>Sarah M.</h4>
+                                <h4 {{request.author}} M.</h4>
                                 <div class="requester-stats">⭐ 5.0 rating • Member since 2023</div>
                             </div>
                         </div>

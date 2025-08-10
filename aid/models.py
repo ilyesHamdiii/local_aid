@@ -11,8 +11,9 @@ class Request(models.Model):
     urgency_level=models.CharField(max_length=50)
     preferred_time=models.CharField( max_length=50)
     estimated_duration=models.CharField(max_length=50)
+    skills=models.CharField(max_length=50)
     offer=models.TextField()
-    photo=models.ImageField(upload_to='request_photos/', blank=True, null=True)
+    photo=models.URLField(blank=True, null=True)
     author=models.ForeignKey('user.UserTable', on_delete=models.CASCADE) 
     time_posted=models.DateTimeField(auto_now_add=True)
 

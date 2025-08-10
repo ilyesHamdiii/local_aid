@@ -341,7 +341,7 @@
     </style>
   </head>
   <body>
-    <a href="home.html" class="back-to-home">← Back to Home</a>
+    <a href="{% url 'aid:home'%}" class="back-to-home">← Back to Home</a>
 
     <div class="login-container">
       <div class="loading-overlay" id="loading-overlay">
@@ -388,9 +388,7 @@
             <input type="checkbox" id="remember" name="remember" />
             <label for="remember">Remember me</label>
           </div>
-          <a href="forgot-password.html" class="forgot-password"
-            >Forgot password?</a
-          >
+          <a href="#" class="forgot-password">Forgot password?</a>
         </div>
 
         <button type="submit" class="btn btn-primary" id="login-btn">
@@ -420,7 +418,10 @@
       </div>
 
       <div class="signup-link">
-        <p>Don't have an account? <a href="register.html">Sign up here</a></p>
+        <p>
+          Don't have an account?
+          <a href="{% url 'user:register'%}">Sign up here</a>
+        </p>
       </div>
     </div>
 
@@ -473,7 +474,8 @@
           // Redirect after short delay
           setTimeout(() => {
             const urlParams = new URLSearchParams(window.location.search);
-            const returnUrl = urlParams.get("return") || "browse.html";
+            const returnUrl =
+              urlParams.get("return") || "{% url 'aid:requests' %}";
             window.location.href = returnUrl;
           }, 1500);
         } catch (error) {
@@ -510,7 +512,7 @@
           showLoading(false);
           showSuccess();
           setTimeout(() => {
-            window.location.href = "browse.html";
+            window.location.href = "{% url 'aid:requests' %}";
           }, 1500);
         }, 2000);
       }

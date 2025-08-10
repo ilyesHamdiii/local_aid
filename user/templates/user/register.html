@@ -417,7 +417,7 @@
     </style>
   </head>
   <body>
-    <a href="home.html" class="back-to-home">← Back to Home</a>
+    <a href="{% url 'aid:home'%}" class="back-to-home">← Back to Home</a>
 
     <div class="register-container">
       <div class="loading-overlay" id="loading-overlay">
@@ -479,14 +479,9 @@
         <div class="form-group required">
           <label for="location">Location</label>
           <select id="location" name="location" required>
-            <option value="">Select your area</option>
-            <option value="downtown">Downtown</option>
-            <option value="riverside">Riverside District</option>
-            <option value="oak-street">Oak Street</option>
-            <option value="hillside">Hillside</option>
-            <option value="market-square">Market Square</option>
-            <option value="westside">Westside</option>
-            <option value="eastend">East End</option>
+            {% for loc in locations%}
+            <option value="{{loc.id }}">{{loc.name}}</option>
+            {%endfor%}
           </select>
           <div class="form-help">
             This helps neighbors find you for local requests
@@ -576,7 +571,10 @@
       </div>
 
       <div class="login-link">
-        <p>Already have an account? <a href="login.html">Sign in here</a></p>
+        <p>
+          Already have an account?
+          <a href="{% url 'user:login'%}">Sign in here</a>
+        </p>
       </div>
     </div>
 
@@ -689,7 +687,7 @@
           showSuccess("Account created successfully! Welcome to MutualAid.");
 
           setTimeout(() => {
-            window.location.href = "login.html";
+            window.location.href = "{% url 'aid:requests'%}";
           }, 2000);
         } catch (error) {
           showError(error.message);
@@ -765,7 +763,7 @@
           showLoading(false);
           showSuccess(`Account created successfully with ${provider}!`);
           setTimeout(() => {
-            window.location.href = "browse.html";
+            window.location.href = "{% url 'aid:requests' %}";
           }, 2000);
         }, 2000);
       }

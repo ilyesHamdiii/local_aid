@@ -465,360 +465,145 @@
         </div>
 
         <div class="requests-grid" id="requests-container">
+          {% for request in page_obj %}
           <div
             class="request-card"
             data-category="errands"
             data-location="downtown"
-            data-urgency="medium"
+            data-urgency="{{ request.urgency }}"
           >
             <div class="request-header">
               <div>
-                <div class="request-title">Help with grocery shopping</div>
+                <div class="request-title">{{request.title}}</div>
                 <div class="request-meta">
                   <span>Posted 2 hours ago</span>
                   <span>•</span>
-                  <span>By Sarah M.</span>
+                  <span>{{request.author}}</span>
                   <div class="urgency-indicator urgency-medium"></div>
                 </div>
               </div>
-              <div class="request-type errands">Errands</div>
+              <div class="request-type errands">{{request.category}}</div>
             </div>
-            <div class="request-description">
-              Looking for someone to help pick up groceries for an elderly
-              neighbor who can't get out easily. Just basic items from the local
-              supermarket. Would be greatly appreciated!
-            </div>
+            <div class="request-description">{{request.description}}</div>
             <div class="request-footer">
-              <div class="request-location">📍 Downtown Area</div>
+              <div class="request-location">📍 {{request.location}}</div>
               <a
-                href="{% url 'aid:request_detail'%}"
+                href="{% url 'aid:request_detail' request.id%}"
                 class="btn btn-primary btn-small"
                 >Offer Help</a
               >
             </div>
           </div>
-
-          <div
-            class="request-card"
-            data-category="moving"
-            data-location="riverside"
-            data-urgency="high"
-          >
-            <div class="request-header">
-              <div>
-                <div class="request-title">Moving boxes - need 2 people</div>
-                <div class="request-meta">
-                  <span>Posted 5 hours ago</span>
-                  <span>•</span>
-                  <span>By Mike D.</span>
-                  <div class="urgency-indicator urgency-high"></div>
-                </div>
-              </div>
-              <div class="request-type moving">Moving</div>
-            </div>
-            <div class="request-description">
-              Moving to a new apartment this weekend and need help carrying
-              boxes down 2 flights of stairs. Should take about 2 hours. Pizza
-              and drinks provided!
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Riverside District</div>
-              <a href="{% url 'aid:request_detail'%}">Offer Help</a>
-            </div>
+          {% empty %}
+          <div class="no-results">
+            <h3>No requests found.</h3>
           </div>
-
-          <div
-            class="request-card"
-            data-category="pet-care"
-            data-location="oak-street"
-            data-urgency="low"
-          >
-            <div class="request-header">
-              <div>
-                <div class="request-title">Dog walking while I'm away</div>
-                <div class="request-meta">
-                  <span>Posted 1 day ago</span>
-                  <span>•</span>
-                  <span>By Emma L.</span>
-                  <div class="urgency-indicator urgency-low"></div>
-                </div>
-              </div>
-              <div class="request-type pet-care">Pet Care</div>
-            </div>
-            <div class="request-description">
-              Going out of town for 3 days and need someone to walk my friendly
-              golden retriever twice a day. All supplies provided. Max loves
-              meeting new people!
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Oak Street</div>
-              <a href="{% url 'aid:request_detail'%}">Offer Help</a>
-            </div>
-          </div>
-
-          <div
-            class="request-card"
-            data-category="tech"
-            data-location="hillside"
-            data-urgency="medium"
-          >
-            <div class="request-header">
-              <div>
-                <div class="request-title">Help setting up computer</div>
-                <div class="request-meta">
-                  <span>Posted 3 hours ago</span>
-                  <span>•</span>
-                  <span>By Robert K.</span>
-                  <div class="urgency-indicator urgency-medium"></div>
-                </div>
-              </div>
-              <div class="request-type tech">Tech Help</div>
-            </div>
-            <div class="request-description">
-              Just got a new computer and need help setting it up and
-              transferring files from my old one. Not very tech-savvy but eager
-              to learn!
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Hillside</div>
-              <a href="{% url 'aid:request_detail'%}">Offer Help</a>
-            </div>
-          </div>
-
-          <div
-            class="request-card"
-            data-category="food"
-            data-location="market-square"
-            data-urgency="high"
-          >
-            <div class="request-header">
-              <div>
-                <div class="request-title">Meal prep for sick family</div>
-                <div class="request-meta">
-                  <span>Posted 1 hour ago</span>
-                  <span>•</span>
-                  <span>By Lisa R.</span>
-                  <div class="urgency-indicator urgency-high"></div>
-                </div>
-              </div>
-              <div class="request-type food">Food</div>
-            </div>
-            <div class="request-description">
-              My family is down with the flu and we could really use some help
-              with meal preparation. Simple, healthy meals would be amazing.
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Market Square</div>
-              <a href="{% url 'aid:request_detail'%}">Offer Help</a>
-            </div>
-          </div>
-
-          <div
-            class="request-card"
-            data-category="other"
-            data-location="downtown"
-            data-urgency="low"
-          >
-            <div class="request-header">
-              <div>
-                <div class="request-title">Garden maintenance help</div>
-                <div class="request-meta">
-                  <span>Posted 6 hours ago</span>
-                  <span>•</span>
-                  <span>By Thomas H.</span>
-                  <div class="urgency-indicator urgency-low"></div>
-                </div>
-              </div>
-              <div class="request-type other">Other</div>
-            </div>
-            <div class="request-description">
-              Looking for help with basic garden maintenance - weeding,
-              watering, and some light pruning. Great for someone who enjoys
-              outdoor work!
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Downtown Area</div>
-              <a href="{% url 'aid:request_detail'%}">Offer Help</a>
-            </div>
-          </div>
-
-          <div
-            class="request-card"
-            data-category="errands"
-            data-location="riverside"
-            data-urgency="medium"
-          >
-            <div class="request-header">
-              <div>
-                <div class="request-title">Pharmacy pickup</div>
-                <div class="request-meta">
-                  <span>Posted 4 hours ago</span>
-                  <span>•</span>
-                  <span>By Maria S.</span>
-                  <div class="urgency-indicator urgency-medium"></div>
-                </div>
-              </div>
-              <div class="request-type errands">Errands</div>
-            </div>
-            <div class="request-description">
-              Need someone to pick up prescription medication from the pharmacy.
-              I'm unable to leave the house due to mobility issues.
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Riverside District</div>
-              <a href="{% url 'aid:request_detail'%}">Offer Help</a>
-            </div>
-          </div>
-
-          <div
-            class="request-card"
-            data-category="tech"
-            data-location="oak-street"
-            data-urgency="low"
-          >
-            <div class="request-header">
-              <div>
-                <div class="request-title">WiFi troubleshooting</div>
-                <div class="request-meta">
-                  <span>Posted 8 hours ago</span>
-                  <span>•</span>
-                  <span>By Jennifer P.</span>
-                  <div class="urgency-indicator urgency-low"></div>
-                </div>
-              </div>
-              <div class="request-type tech">Tech Help</div>
-            </div>
-            <div class="request-description">
-              Internet has been acting up lately and I can't figure out what's
-              wrong. Would appreciate someone tech-savvy taking a look.
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Oak Street</div>
-              <a href="{% url 'aid:request_detail'%}">Offer Help</a>
-            </div>
-          </div>
-
-          <div
-            class="request-card"
-            data-category="pet-care"
-            data-location="hillside"
-            data-urgency="high"
-          >
-            <div class="request-header">
-              <div>
-                <div class="request-title">Emergency cat sitting</div>
-                <div class="request-meta">
-                  <span>Posted 30 minutes ago</span>
-                  <span>•</span>
-                  <span>By David W.</span>
-                  <div class="urgency-indicator urgency-high"></div>
-                </div>
-              </div>
-              <div class="request-type pet-care">Pet Care</div>
-            </div>
-            <div class="request-description">
-              Unexpected family emergency - need someone to take care of my two
-              cats for 2-3 days. They're very well-behaved and low maintenance.
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Hillside</div>
-              <a href="{% url 'aid:request_detail'%}">Offer Help</a>
-            </div>
-          </div>
+          {% endfor %}
         </div>
 
         <div class="pagination">
-          <button>&larr; Previous</button>
-          <button class="active">1</button>
-          <button>2</button>
-          <button>3</button>
-          <button>Next &rarr;</button>
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn">&larr; Previous</a>
+          {% endif %}
+          {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+              <span class="btn active">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a href="?page={{ num }}" class="btn">{{ num }}</a>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn">Next &rarr;</a>
+          {% endif %}
         </div>
       </div>
     </main>
 
     <script>
       // Filter functionality
-      const categoryFilter = document.getElementById('category');
-      const locationFilter = document.getElementById('location');
-      const urgencyFilter = document.getElementById('urgency');
-      const searchInput = document.getElementById('search');
-      const requestCards = document.querySelectorAll('.request-card');
-      const resultsCount = document.getElementById('results-count');
+      const categoryFilter = document.getElementById("category");
+      const locationFilter = document.getElementById("location");
+      const urgencyFilter = document.getElementById("urgency");
+      const searchInput = document.getElementById("search");
+      const requestCards = document.querySelectorAll(".request-card");
+      const resultsCount = document.getElementById("results-count");
 
       function filterRequests() {
-          const category = categoryFilter.value.toLowerCase();
-          const location = locationFilter.value.toLowerCase();
-          const urgency = urgencyFilter.value.toLowerCase();
-          const search = searchInput.value.toLowerCase();
+        const category = categoryFilter.value.toLowerCase();
+        const location = locationFilter.value.toLowerCase();
+        const urgency = urgencyFilter.value.toLowerCase();
+        const search = searchInput.value.toLowerCase();
 
-          let visibleCount = 0;
+        let visibleCount = 0;
 
-          requestCards.forEach(card => {
-              const cardCategory = card.dataset.category;
-              const cardLocation = card.dataset.location;
-              const cardUrgency = card.dataset.urgency;
-              const cardText = card.textContent.toLowerCase();
+        requestCards.forEach((card) => {
+          const cardCategory = card.dataset.category;
+          const cardLocation = card.dataset.location;
+          const cardUrgency = card.dataset.urgency;
+          const cardText = card.textContent.toLowerCase();
 
-              const categoryMatch = !category || cardCategory === category;
-              const locationMatch = !location || cardLocation === location;
-              const urgencyMatch = !urgency || cardUrgency === urgency;
-              const searchMatch = !search || cardText.includes(search);
+          const categoryMatch = !category || cardCategory === category;
+          const locationMatch = !location || cardLocation === location;
+          const urgencyMatch = !urgency || cardUrgency === urgency;
+          const searchMatch = !search || cardText.includes(search);
 
-              if (categoryMatch && locationMatch && urgencyMatch && searchMatch) {
-                  card.style.display = 'block';
-                  visibleCount++;
-              } else {
-                  card.style.display = 'none';
-              }
-          });
+          if (categoryMatch && locationMatch && urgencyMatch && searchMatch) {
+            card.style.display = "block";
+            visibleCount++;
+          } else {
+            card.style.display = "none";
+          }
+        });
 
-          resultsCount.textContent = visibleCount;
+        resultsCount.textContent = visibleCount;
       }
 
       // Add event listeners
-      categoryFilter.addEventListener('change', filterRequests);
-      locationFilter.addEventListener('change', filterRequests);
-      urgencyFilter.addEventListener('change', filterRequests);
-      searchInput.addEventListener('input', filterRequests);
+      categoryFilter.addEventListener("change", filterRequests);
+      locationFilter.addEventListener("change", filterRequests);
+      urgencyFilter.addEventListener("change", filterRequests);
+      searchInput.addEventListener("input", filterRequests);
 
       // View toggle functionality
-      const viewToggleButtons = document.querySelectorAll('.view-toggle button');
-      const requestsContainer = document.getElementById('requests-container');
+      const viewToggleButtons = document.querySelectorAll(
+        ".view-toggle button"
+      );
+      const requestsContainer = document.getElementById("requests-container");
 
-      viewToggleButtons.forEach(button => {
-          button.addEventListener('click', () => {
-              viewToggleButtons.forEach(btn => btn.classList.remove('active'));
-              button.classList.add('active');
+      viewToggleButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          viewToggleButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
 
-              if (button.dataset.view === 'list') {
-                  requestsContainer.style.gridTemplateColumns = '1fr';
-                  requestsContainer.style.gap = '1rem';
-              } else {
-                  requestsContainer.style.gridTemplateColumns = 'repeat(auto-fit, minmax(350px, 1fr))';
-                  requestsContainer.style.gap = '2rem';
-              }
-          });
+          if (button.dataset.view === "list") {
+            requestsContainer.style.gridTemplateColumns = "1fr";
+            requestsContainer.style.gap = "1rem";
+          } else {
+            requestsContainer.style.gridTemplateColumns =
+              "repeat(auto-fit, minmax(350px, 1fr))";
+            requestsContainer.style.gap = "2rem";
+          }
+        });
       });
 
       // Click handler for request cards
-      requestCards.forEach(card => {
-          card.addEventListener('click', (e) => {
-              if (!e.target.classList.contains('btn')) {
-                  window.location.href = '{% url 'aid:request_detail'%}';
-              }
-          });
+      requestCards.forEach((card) => {
+        card.addEventListener("click", (e) => {
+          if (!e.target.classList.contains("btn")) {
+            window.location.href = "#";
+          }
+        });
       });
 
       // Pagination functionality (basic)
-      const paginationButtons = document.querySelectorAll('.pagination button');
-      paginationButtons.forEach(button => {
-          button.addEventListener('click', () => {
-              if (button.textContent.match(/\d+/)) {
-                  paginationButtons.forEach(btn => btn.classList.remove('active'));
-                  button.classList.add('active');
-              }
-          });
+      const paginationButtons = document.querySelectorAll(".pagination button");
+      paginationButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          if (button.textContent.match(/\d+/)) {
+            paginationButtons.forEach((btn) => btn.classList.remove("active"));
+            button.classList.add("active");
+          }
+        });
       });
 
       // Initialize count
