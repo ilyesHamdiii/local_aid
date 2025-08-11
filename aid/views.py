@@ -28,11 +28,11 @@ def post_request_view(request):
         description = request.POST.get('description')
         category = request.POST.get('category')
         location = request.POST.get('location')
-        urgency_level = request.POST.get('urgency_level')
-        preferred_time = request.POST.get('preferred_time')
-        estimated_duration = request.POST.get('estimated_duration')
-        offer = request.POST.get('offer')
-        photo = request.FILES.get('photo')
+        urgency_level = request.POST.get('urgency')
+        preferred_time = request.POST.get('preferred-time')
+        estimated_duration = request.POST.get('duration')
+        offer = request.POST.get('compensation')
+        photo = request.FILES.get('photos')
         author = request.user
 
         post=Request.objects.create(

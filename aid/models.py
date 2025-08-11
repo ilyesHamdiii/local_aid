@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models import ForeignKey
+from django.contrib.auth.models import User
+from django.conf import settings
 
 
 # Create your models here.
@@ -14,7 +16,7 @@ class Request(models.Model):
     skills=models.CharField(max_length=50)
     offer=models.TextField()
     photo=models.URLField(blank=True, null=True)
-    author=models.ForeignKey('user.UserTable', on_delete=models.CASCADE) 
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
     time_posted=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
