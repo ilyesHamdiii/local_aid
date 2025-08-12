@@ -417,11 +417,13 @@
               <label for="category">Category</label>
               <select id="category">
                 <option value="">All Categories</option>
-                <option value="errands">Errands</option>
-                <option value="moving">Moving</option>
-                <option value="pet-care">Pet Care</option>
-                <option value="tech">Tech Help</option>
-                <option value="food">Food</option>
+                <option value="Errands">Errands</option>
+                <option value="Moving">Moving</option>
+                <option value="Pet care">Pet Care</option>
+                <option value="Tech Help">Tech Help</option>
+                <option value="Food and meals">Food</option>
+                <option value="childcare">childcare</option>
+                <option value="home and garden">childcare</option>
                 <option value="other">Other</option>
               </select>
             </div>
@@ -430,11 +432,13 @@
             <label for="location">Location</label>
             <select id="location">
               <option value="">All Areas</option>
-              <option value="downtown">Downtown</option>
-              <option value="riverside">Riverside District</option>
-              <option value="oak-street">Oak Street</option>
-              <option value="hillside">Hillside</option>
-              <option value="market-square">Market Square</option>
+              <option value="Downtown">Downtown</option>
+              <option value="Riverside District">Riverside District</option>
+              <option value="Oak street">Oak Street</option>
+              <option value="Hill side">Hillside</option>
+              <option value="Market Square">Market Square</option>
+              <option value="West Side">West Side</option>
+              <option value="East End">East End</option>
             </select>
           </div>
 
@@ -468,9 +472,9 @@
           {% for request in page_obj %}
           <div
             class="request-card"
-            data-category="errands"
-            data-location="downtown"
-            data-urgency="{{ request.urgency }}"
+            data-category="{{request.category|lower}}"
+            data-location="{{request.location|lower}}"
+            data-urgency="{{request.urgency_level|lower}}"
           >
             <div class="request-header">
               <div>
@@ -537,15 +541,29 @@
         let visibleCount = 0;
 
         requestCards.forEach((card) => {
+
           const cardCategory = card.dataset.category;
           const cardLocation = card.dataset.location;
           const cardUrgency = card.dataset.urgency;
           const cardText = card.textContent.toLowerCase();
+          console.log(
+            `Filtering: ${cardCategory}, ${cardLocation}, ${cardUrgency}`
+          );
 
-          const categoryMatch = !category || cardCategory === category;
-          const locationMatch = !location || cardLocation === location;
-          const urgencyMatch = !urgency || cardUrgency === urgency;
-          const searchMatch = !search || cardText.includes(search);
+
+          const categoryMatch = !category || cardCategory.toLowerCase().trim() === category;
+          const locationMatch = !location || cardLocation.toLowerCase().trim() === location;
+          const urgencyMatch = !urgency || cardUrgency.toLowerCase().trim() === urgency;
+           const searchMatch = !search || cardText.includes(search);7
+          console.log({
+            category, cardCategory,
+            categoryMatch,
+            location, cardLocation,
+            locationMatch,
+            urgency, cardUrgency,
+            urgencyMatch
+        });
+
 
           if (categoryMatch && locationMatch && urgencyMatch && searchMatch) {
             card.style.display = "block";
@@ -605,6 +623,7 @@
           }
         });
       });
+
 
       // Initialize count
       filterRequests();

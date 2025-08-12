@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from . import models 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm 
 from django.contrib import messages
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import UserProfile
 
 # Create your views here.
 
@@ -47,3 +50,24 @@ def register_view(request):
 def logout_view(request):
     logout(request)
     return redirect("aid:home")
+@login_required
+def profile_view(request):
+    if request.method == "POST":
+        user_profile = UserProfile.objects.get(user=request.user)
+        user_profile.location = request.POST.get("location", user_profile.location)
+        user_profile.phone_number = request.POST.get("phone_number", user_profile.phone_number)
+        if 'profile_picture' in request.FILES:
+            user_profile.profile_picture = request.FILES['profile_picture']
+        user_profile.save()
+        messages.success(request, "Profile updated successfully.")
+    else:
+        user_profile = UserProfile.objects.get(user=request.user)
+    return render(request, "user/profile.html", {"user": request.user, "profile": user_profile})
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.userprofile.save()
