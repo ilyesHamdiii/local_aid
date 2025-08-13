@@ -13,6 +13,7 @@ urlpatterns = [
     path("post/", post_request_view, name="post_request"),
     path("",include('user.urls')),  # Include the URLs from the user app
 
+
 ]
 
 if settings.DEBUG:

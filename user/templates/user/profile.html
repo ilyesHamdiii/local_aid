@@ -13,17 +13,8 @@
     padding: 0;
 }
 
-.navbar {
-    background-color: #2c3e50;
-    padding: 15px;
-}
 
-.navbar a {
-    color: white;
-    margin-right: 15px;
-    text-decoration: none;
-    font-weight: bold;
-}
+
 
 .footer {
     text-align: center;
@@ -36,12 +27,17 @@
 }
 
 .profile-form {
+    position: relative;
+    top: 400x;
+    Left:50%
     background: white;
-    max-width: 500px;
+    max-width: 1000px;
     margin: 30px auto;
     padding: 25px;
     border-radius: 8px;
+    background-color: #fff;
     box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    height: 750px;
 }
 
 .form-group {
@@ -52,10 +48,13 @@ input[type="text"], input[type="file"] {
     width: 100%;
     padding: 8px;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 2px solid #000000ff;
+    margin:10px
+
+    
 }
 
-.btn-submit {
+.btn-submitt {
     background-color: #2980b9;
     border: none;
     padding: 12px 20px;
@@ -70,9 +69,11 @@ input[type="text"], input[type="file"] {
 }
 
 .profile-picture-preview {
+  position: relative;
     max-width: 150px;
     border-radius: 50%;
     margin-bottom: 10px;
+    Left: 40%;
 }
 
 .messages {
@@ -132,6 +133,6 @@ input[type="text"], input[type="file"] {
     <input type="text" name="phone_number" id="phone_number" value="{{ profile.phone_number }}">
   </div>
 
-  <button type="submit" class="btn-submit">Mettre à jour</button>
+  <button type="submit" class="btn-submitt">Mettre à jour</button>
 </form>
 {% endblock %}

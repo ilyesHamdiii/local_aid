@@ -585,6 +585,7 @@
                         <h3>Offer to Help</h3>
                         <p>Want to help {{request.author}} with this request? Send a message to get started.</p>
                         <button class="btn btn-primary btn-large" style="width: 100%;" onclick="showOfferModal()">Offer Your Help</button>
+                        <a href="{% url 'conversation:new' request.id %}">
                     </div>
 
                     <div class="requester-info">
@@ -594,7 +595,9 @@
                 <textarea placeholder="Hi {{request.author}} ! I'd love to help with your grocery shopping request..." style="width: 100%; min-height: 120px; padding: 1rem; border: 2px solid #e1e5e9; border-radius: 10px; margin-bottom: 1rem; font-family: inherit; resize: vertical;"></textarea>
                 <div style="display: flex; gap: 1rem; justify-content: flex-end;">
                     <button type="button" class="btn btn-outline" onclick="hideOfferModal()">Cancel</button>
+                    
                     <button type="submit" class="btn btn-primary">Send Offer</button>
+                    </a>
                 </div>
             </form>
         </div>

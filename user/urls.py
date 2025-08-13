@@ -10,6 +10,9 @@ urlpatterns = [
     path('register',register_view, name='register'),
     path('logout', logout_view, name='logout'),
     path('profile', profile_view, name='profile'),
+    path('', include('conversation.urls')),
+    path('', include('dashboard.urls')),
+
 
 ]
 
