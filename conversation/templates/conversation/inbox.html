@@ -3,23 +3,90 @@
 {% block title %}Inbox{% endblock %}
 
 {% block content %}
-<h1 class="mb-6 text-3xl">Inbox</h1>
+<style>
+    body {
+        background-color: #fc8c8cff;
+        color: #000;
+        font-family: sans-serif;
+    }
 
-<div class="space-y-6">
+    h1.mb {
+        margin-bottom: 2rem;
+        text-align: center;
+        font-size: 2rem;
+    }
+
+    .inbox-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+
+    .conversation-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .conversation-card {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        background-color: #f8f8f8;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .conversation-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+    }
+
+    .conversation-card img {
+        width: 60px;
+        height: 60px;
+        border-radius: 0.5rem;
+        object-fit: cover;
+    }
+
+    .conversation-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .conversation-info p {
+        margin: 0.2rem 0;
+    }
+
+    .conversation-info .username {
+        font-weight: bold;
+    }
+
+    .conversation-info .time {
+        font-size: 0.85rem;
+        color: #555;
+    }
+</style>
+
+<h1 class="mb">Inbox</h1>
+
+<div class="inbox-container">
     {% for conversation in conversations %}
-        <a href="{% url 'conversation:detail' conversation.id %}">
-            <div class="p-6 flex bg-gray-100 rounded-xl">
-                <div class="pr-6">
-                    <img src="{{ conversation.item.image.url }}" class="w-20 rounded-xl">
-                </div>
-
-                <div>
+        <a class="conversation-link" href="{% url 'conversation:detail' conversation.id %}">
+            <div class="conversation-card">
+                <img src="{{ profile.profile_picture}}" alt="Item image">
+                <div class="conversation-info">
                     {% for member in conversation.members.all %}
                         {% if member != request.user %}
-                            <p class="mb-4"><strong>{{ member.username }}</strong> | {{ conversation.modified_at }}</p>
-                            <p>{{ conversation.item.name }}</p>
+                            <p class="username">{{ member.username }}</p>
                         {% endif %}
                     {% endfor %}
+                    <p class="time">{{ conversation.modified_at|date:"M d, Y H:i" }}</p>
+                    <p>{{ conversation.item.name }}</p>
                 </div>
             </div>
         </a>

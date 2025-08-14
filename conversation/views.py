@@ -1,5 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from dashboard.views import index
+from user.models import UserProfile
 
 from aid.models import Request
 
@@ -11,8 +14,11 @@ def new_conversation(request, item_pk):
     item = get_object_or_404(Request, pk=item_pk)
 
     if item.author == request.user:
-        return redirect('dashboard:index')
-    
+        items = Request.objects.filter(author=request.user)
+
+        return render(request, 'dashboard/index.html', {
+            'Requests': items,
+        })
     conversations = Conversation.objects.filter(item=item).filter(members__in=[request.user.id])
 
     if conversations:
@@ -43,9 +49,24 @@ def new_conversation(request, item_pk):
 @login_required
 def inbox(request):
     conversations = Conversation.objects.filter(members__in=[request.user.id])
+    for convo in conversations:
+    # Get all members in this conversation
+        members = list(convo.members.all())
+        # Remove the logged-in user to get the other member
+        receiver = [m for m in members if m != request.user]
+        if receiver:
+            receiver_user = receiver[0]  # The other member
+            profile = UserProfile.objects.filter(user=receiver_user).first()
+        else:
+            receiver_user = None
+            profile = None
+    requests = Request.objects.filter(author=request.user)
+    print("conversations", conversations)
 
     return render(request, 'conversation/inbox.html', {
-        'conversations': conversations
+        'conversations': conversations,
+        'requests': requests,
+        "profile": profile,
     })
 
 @login_required

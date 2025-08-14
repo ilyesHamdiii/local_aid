@@ -355,6 +355,8 @@
           <li><a href="{% url 'aid:requests'%}">Browse Requests</a></li>
           <li><a href="{% url 'aid:post_request'%}">Post Request</a></li>
           <li><a href="#">About</a></li>
+          <li><a href="{% url 'conversation:inbox'%}">Inbox</a></li>
+
         </ul>
         <div class="auth-buttons">
           {% if user.is_authenticated %}
@@ -362,6 +364,7 @@
           <a href="{% url 'user:profile' %}" class="btn btn-outline"
             >user profile
           </a>
+          
           {% else %}
           <a href="{% url 'user:login' %}" class="btn btn-outline">Login</a>
           <a href="{% url 'user:register' %}" class="btn btn-primary"

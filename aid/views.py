@@ -3,8 +3,7 @@ from .models import Request, Category, Location
 from django.core.paginator import Paginator
 
 # Create your views here.
-def base_view(request):
-    return render(request, 'aid/base.html')
+
 def home_view(request):
     return render(request, 'aid/home.html')
 def request_detail_view(request,request_id):
