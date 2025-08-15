@@ -1,12 +1,13 @@
 from django.contrib import admin
 from django.urls import path,include
-from .views import  home_view, request_detail_view, post_request_view, requests_list
+from .views import  home_view, request_detail_view, post_request_view, requests_list,base_view
 from django.conf import settings
 from django.conf.urls.static import static
 
 app_name = 'aid'
 urlpatterns = [
-    path("home/", home_view, name="home"),
+    path("base",base_view,name="base"),
+    path("", home_view, name="home"),
     path("request_detail/<int:request_id>", request_detail_view, name="request_detail"),
     path("requests/", requests_list, name="requests"),
     path("post/", post_request_view, name="post_request"),

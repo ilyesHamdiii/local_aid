@@ -1,11 +1,16 @@
 from django.shortcuts import render,redirect
 from .models import Request, Category, Location
 from django.core.paginator import Paginator
+from user.models import UserProfile
 
-# Create your views here.
-
+def base_view(request):
+    return render(request,"aid/base.html")
 def home_view(request):
-    return render(request, 'aid/home.html')
+    if  not request.user.is_authenticated:
+        return redirect("user:login")
+    profile = UserProfile.objects.filter(user=request.user).first()
+    print("profile",profile)
+    return render(request, 'aid/home.html',{"profile":profile})
 def request_detail_view(request,request_id):
     try:
         request_detail = Request.objects.get(id=request_id)
@@ -54,10 +59,12 @@ def requests(request):
     requests = Request.objects.all()
     categories = Category.objects.all()
     locations = Location.objects.all()
+    profile = UserProfile.objects.filter(user=request.user).first()
     context = {
         'requests': requests,
         'categories': categories,
-        'locations': locations
+        'locations': locations,
+        "profile":profile
     }
 
     return render(request, 'aid/requests.html',context)

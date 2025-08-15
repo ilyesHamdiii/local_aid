@@ -1,4 +1,4 @@
-let nav = document.querySelector(".nav");
+let nav = document.querySelector(".navbar");
 document.addEventListener("scroll", () => {
   console.log(window.scrollY);
   if (window.scrollY > 30) {
