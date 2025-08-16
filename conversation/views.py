@@ -61,12 +61,14 @@ def inbox(request):
             receiver_user = None
             profile = None
     requests = Request.objects.filter(author=request.user)
+    picture=UserProfile.objects.filter(user=request.user).first()
     print("conversations", conversations)
 
     return render(request, 'conversation/inbox.html', {
         'conversations': conversations,
         'requests': requests,
-        "profile": profile,
+        "profilee": profile,
+        "profile": picture,
     })
 
 @login_required
@@ -87,8 +89,21 @@ def detail(request, pk):
             return redirect('conversation:detail', pk=pk)
     else:
         form = ConversationMessageForm()
-
+        members = list(conversation.members.all())
+        print(members)
+            # Remove the logged-in user to get the other member
+        receiver = [m for m in members if m != request.user]
+        print(receiver)
+        if receiver:
+            receiver_user = receiver[0]  # The other member
+            receiverr= UserProfile.objects.filter(user=receiver_user).first()
+        else:
+            receiver_user = None
+            receiverr = None
+    sender=UserProfile.objects.filter(user=request.user).first()
     return render(request, 'conversation/detail.html', {
         'conversation': conversation,
-        'form': form
+        'form': form,
+        'sender':sender,
+        "receiver":receiverr,
     })

@@ -78,7 +78,7 @@
     {% for conversation in conversations %}
         <a class="conversation-link" href="{% url 'conversation:detail' conversation.id %}">
             <div class="conversation-card">
-                <img src="{{ profile.profile_picture}}" alt="Item image">
+                <img src="{{ profilee.profile_picture.url}}" alt="Item image">
                 <div class="conversation-info">
                     {% for member in conversation.members.all %}
                         {% if member != request.user %}
