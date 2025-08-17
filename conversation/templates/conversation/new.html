@@ -1,27 +1,127 @@
 {% extends 'aid/base.html' %}
 
-{% block title %}New conversation{% endblock %}
+{% block title %}New Conversation - RequestHub{% endblock %}
 
 {% block content %}
-<h1 class="mb-6 text-3xl">New conversation</h1>
-
-<form method="post" action=".">
-    {% csrf_token %}
-
-    <div class="space-y-4">
-        {{ form.as_p }}
-    </div>
-
-    {% if form.errors or form.non_field_errors %}
-        <div class="mb-3 p-6 bg-red-100 rounded-xl">
-            {% for field in form %}
-                {{ field.errors }}
-            {% endfor %}
-
-            {{ form.non_field_errors }}
+<main class="py-8">
+    <div class="container mx-auto px-4 max-w-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">Start New Conversation</h1>
+            <p class="text-xl text-gray-600">Connect with a community member about their request</p>
         </div>
-    {% endif %}
 
-    <button class="mt-6 py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Send</button>
-</form>
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+            <form method="post" action="." class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Form Fields -->
+                <div class="space-y-6">
+                    {% for field in form %}
+                        <div class="space-y-2">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-900">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span class="text-red-500">*</span>
+                                {% endif %}
+                            </label>
+                            
+                            {% if field.name == 'content' %}
+                                <textarea name="{{ field.name }}" id="{{ field.id_for_label }}" 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors resize-y min-h-32"
+                                        placeholder="Type your message here..." 
+                                        {% if field.field.required %}required{% endif %}>{{ field.value|default:'' }}</textarea>
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                            
+                            {% if field.help_text %}
+                                <p class="text-sm text-gray-600">{{ field.help_text }}</p>
+                            {% endif %}
+                            
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <p class="text-sm text-red-600">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Error Messages -->
+                {% if form.errors or form.non_field_errors %}
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                        <div class="flex items-center mb-2">
+                            <svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <h3 class="text-sm font-semibold text-red-800">Please fix the following errors:</h3>
+                        </div>
+                        
+                        {% for field in form %}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <p class="text-sm text-red-700">{{ field.label }}: {{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% for error in form.non_field_errors %}
+                            <p class="text-sm text-red-700">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                    <button type="button" onclick="window.history.back()" 
+                            class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 btn-hover transition-all duration-300">
+                        Send Message
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Help Text -->
+        <div class="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+            <div class="flex items-start">
+                <svg class="w-6 h-6 text-blue-600 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                    <h3 class="font-semibold text-blue-900 mb-1">Tips for starting a conversation</h3>
+                    <ul class="text-blue-800 text-sm space-y-1">
+                        <li>• Be specific about how you can help</li>
+                        <li>• Mention your availability and location</li>
+                        <li>• Ask any clarifying questions upfront</li>
+                        <li>• Be friendly and professional</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+    /* Style form fields to match the RequestHub theme */
+    .form-control, select, input[type="text"], input[type="email"] {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        background: #f9fafb;
+    }
+    
+    .form-control:focus, select:focus, input[type="text"]:focus, input[type="email"]:focus {
+        outline: none;
+        border-color: #7c3aed;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    }
+</style>
 {% endblock %}

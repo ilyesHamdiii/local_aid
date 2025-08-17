@@ -1,137 +1,169 @@
-{% extends "aid/base.html" %} {% load static %} {% block content %}
-<style>
-  body {
-    background: linear-gradient(135deg, #7b8cff 0%, #8f5fe8 100%);
-    min-height: 100vh;
-  }
-  .register-container {
-    max-width: 600px;
-    margin: 60px auto;
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(44, 44, 84, 0.15);
-    padding: 2.5rem 2rem 2rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 23%;
-    left: 35%;
-  }
-  .register-container img {
-    width: 80px;
-    margin-bottom: 1.5rem;
-    border-radius: 12px;
-  }
-  .register-container h4 {
-    margin-bottom: 1.5rem;
-    font-weight: 700;
-    color: #5a4fcf;
-    text-align: center;
-  }
-  .form-label {
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-    color: #444;
-  }
-  .form-control {
-    width: 100%;
-    padding: 0.6rem 0.9rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    margin-bottom: 1.1rem;
-    font-size: 1rem;
-    background: #f8f9fa;
-    transition: border 0.2s;
-  }
-  .form-control:focus {
-    outline: none;
-    border-color: #7b8cff;
-    background: #fff;
-  }
-  .btn-register {
-    width: 100%;
-    padding: 0.7rem 0;
-    background: linear-gradient(90deg, #7b8cff 0%, #8f5fe8 100%);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 0.3rem;
-  }
-  .btn-register:hover {
-    background: linear-gradient(90deg, #8f5fe8 0%, #7b8cff 100%);
-  }
-  .alert {
-    width: 100%;
-    padding: 0.7rem 1rem;
-    background: #ffe6e6;
-    color: #b30000;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-    font-size: 0.97rem;
-    text-align: center;
-  }
-  .mt-3 {
-    margin-top: 1rem;
-  }
-  .text-center {
-    text-align: center;
-  }
-  a {
-    color: #7b8cff;
-    text-decoration: none;
-    font-weight: 600;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-</style>
+{% extends "aid/base.html" %}
+{% load static %}
 
-<div class="register-container">
-  <h4>Sign Up</h4>
-  {% if messages %} {% for message in messages %}
-  <div class="alert">{{ message }}</div>
-  {% endfor %} {% endif %}
-  <form method="POST" action="">
-    {% csrf_token %}
-    <label for="username" class="form-label">Username</label>
-    <input
-      type="text"
-      class="form-control"
-      id="username"
-      name="username"
-      required
-    />
+{% block title %}Sign Up - RequestHub{% endblock %}
 
-    <label for="email" class="form-label">Email</label>
-    <input type="email" class="form-control" id="email" name="email" required />
+{% block content %}
+<main class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center py-12">
+    <div class="max-w-md w-full space-y-8 px-4">
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="h-12 w-12 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">RQ</span>
+                    </div>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Join RequestHub</h2>
+                <p class="text-gray-600">Create your account and start building community connections</p>
+            </div>
 
-    <label for="password1" class="form-label">Password</label>
-    <input
-      type="password"
-      class="form-control"
-      id="password1"
-      name="password1"
-      required
-    />
+            <!-- Error Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-red-800 text-sm font-medium">{{ message }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-    <label for="password2" class="form-label">Confirm Password</label>
-    <input
-      type="password"
-      class="form-control"
-      id="password2"
-      name="password2"
-      required
-    />
+            <!-- Registration Form -->
+            <form method="POST" action="" class="space-y-6">
+                {% csrf_token %}
+                
+                <div class="space-y-2">
+                    <label for="username" class="block text-sm font-semibold text-gray-900">Username</label>
+                    <input type="text" id="username" name="username" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors bg-gray-50 focus:bg-white"
+                           placeholder="Choose a unique username">
+                    <p class="text-xs text-gray-600">This will be your public display name</p>
+                </div>
 
-    <button type="submit" class="btn-register">Sign Up</button>
-  </form>
-  <div class="mt-3 text-center">
-    Already have an account? <a href="{% url 'user:login' %}">Login</a>
-  </div>
-</div>
+                <div class="space-y-2">
+                    <label for="email" class="block text-sm font-semibold text-gray-900">Email Address</label>
+                    <input type="email" id="email" name="email" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors bg-gray-50 focus:bg-white"
+                           placeholder="Enter your email address">
+                    <p class="text-xs text-gray-600">We'll use this to send you important updates</p>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="password1" class="block text-sm font-semibold text-gray-900">Password</label>
+                    <input type="password" id="password1" name="password1" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors bg-gray-50 focus:bg-white"
+                           placeholder="Create a strong password">
+                    <p class="text-xs text-gray-600">Must be at least 8 characters long</p>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="password2" class="block text-sm font-semibold text-gray-900">Confirm Password</label>
+                    <input type="password" id="password2" name="password2" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors bg-gray-50 focus:bg-white"
+                           placeholder="Confirm your password">
+                </div>
+
+                <div class="flex items-start">
+                    <div class="flex items-center h-5">
+                        <input id="terms" name="terms" type="checkbox" required
+                               class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300 rounded">
+                    </div>
+                    <div class="ml-3 text-sm">
+                        <label for="terms" class="text-gray-600">
+                            I agree to the 
+                            <a href="#" class="text-purple-600 hover:text-purple-500 font-medium">Terms of Service</a> and 
+                            <a href="#" class="text-purple-600 hover:text-purple-500 font-medium">Privacy Policy</a>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" 
+                        class="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 focus:ring-4 focus:ring-purple-200 transition-all duration-300 btn-hover">
+                    Create Account
+                </button>
+            </form>
+
+            <!-- Sign In Link -->
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">
+                    Already have an account? 
+                    <a href="{% url 'user:login' %}" class="text-purple-600 hover:text-purple-500 font-semibold transition-colors">
+                        Sign in
+                    </a>
+                </p>
+            </div>
+
+            <!-- Social Registration (Optional) -->
+            <div class="mt-8">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Or sign up with</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-2 gap-3">
+                    <button class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        </svg>
+                        <span class="ml-2">Google</span>
+                    </button>
+
+                    <button class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        <span class="ml-2">Facebook</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits Section -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 text-center">Why Join RequestHub?</h3>
+            <div class="space-y-3 text-sm">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Connect with neighbors who can help</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Offer your skills to build community</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Secure messaging and verified profiles</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">100% free to use and participate</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Text -->
+        <div class="text-center">
+            <p class="text-sm text-gray-600">
+                Join thousands of community members already helping each other on RequestHub
+            </p>
+        </div>
+    </div>
+</main>
 {% endblock %}

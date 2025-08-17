@@ -1,821 +1,334 @@
-<!DOCTYPE html>
 {% extends "aid/base.html" %}
+{% load static %}
+
+{% block title %}{{ request.title }} - RequestHub{% endblock %}
+
 {% block content %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help with grocery shopping - MutualAid</title>
-</head>
-<body>
-     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #667eea;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.5rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-outline:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-large {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-        }
-
-        .main-content {
-            margin-top: 90px;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .breadcrumb {
-            margin-bottom: 2rem;
-            color: #666;
-        }
-
-        .breadcrumb a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        .request-detail {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        }
-
-        .request-main {
-            background: white;
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .request-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .request-header {
-            margin-bottom: 2rem;
-        }
-
-        .request-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 1rem;
-            line-height: 1.3;
-        }
-
-        .request-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        .request-type {
-            display: inline-block;
-            background: #28a745;
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-
-        .urgency-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .urgency-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .urgency-medium .urgency-dot { background: #ffc107; }
-        .urgency-high .urgency-dot { background: #dc3545; }
-        .urgency-low .urgency-dot { background: #28a745; }
-
-        .request-description {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: #555;
-            margin-bottom: 2rem;
-        }
-
-        .request-details {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .detail-label {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 0.3rem;
-            font-size: 0.9rem;
-        }
-
-        .detail-value {
-            color: #666;
-        }
-
-        .request-photos {
-            margin-bottom: 2rem;
-        }
-
-        .photos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-        }
-
-        .photos-grid img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .photos-grid img:hover {
-            transform: scale(1.05);
-        }
-
-        .action-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .action-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .action-card p {
-            color: #666;
-            margin-bottom: 1.5rem;
-        }
-
-        .requester-info {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .requester-profile {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .requester-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .requester-details h4 {
-            color: #333;
-            margin-bottom: 0.2rem;
-        }
-
-        .requester-stats {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .location-info {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .map-placeholder {
-            width: 100%;
-            height: 150px;
-            background: #e9ecef;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            margin-top: 1rem;
-        }
-
-        .responses-section {
-            margin-top: 3rem;
-        }
-
-        .responses-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .response-card {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .response-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .responder-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .responder-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #28a745, #20c997);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .response-time {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .response-message {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .response-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn-small {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .status-open {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-in-progress {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-completed {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-
-        @media (max-width: 768px) {
-            .request-detail {
-                grid-template-columns: 1fr;
-            }
-            
-            .request-main {
-                padding: 1.5rem;
-            }
-            
-            .request-title {
-                font-size: 1.8rem;
-            }
-            
-            .details-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .photos-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
-    
-
-    <main class="main-content">
-        <div class="container">
-            <div class="breadcrumb">
-                <a href="home.html">Home</a> → 
-                <a href="browse.html">Browse Requests</a> → 
-                {{request.}}
+<main class="py-8">
+    <div class="container mx-auto px-4 max-w-6xl">
+        <!-- Breadcrumb -->
+        <nav class="flex mb-8 text-sm" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{% url 'aid:home' %}" class="text-gray-700 hover:text-purple-600 transition-colors">Home</a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="{% url 'aid:requests' %}" class="text-gray-700 hover:text-purple-600 transition-colors">Browse Requests</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="text-gray-500">{{ request.title|truncatechars:50 }}</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+                    <!-- Request Header -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 text-sm font-medium rounded-full 
+                                   {% if request.category == 'Errands' %}bg-green-100 text-green-800
+                                   {% elif request.category == 'Moving' %}bg-yellow-100 text-yellow-800
+                                   {% elif request.category == 'Pet care' %}bg-blue-100 text-blue-800
+                                   {% elif request.category == 'Tech Help' %}bg-purple-100 text-purple-800
+                                   {% elif request.category == 'Food and meals' %}bg-orange-100 text-orange-800
+                                   {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ request.category }}
+                            </span>
+                            <div class="flex items-center space-x-2">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 rounded-full mr-2 
+                                          {% if request.urgency_level == 'high' %}bg-red-500
+                                          {% elif request.urgency_level == 'medium' %}bg-yellow-500
+                                          {% else %}bg-green-500{% endif %}"></div>
+                                    <span class="text-sm text-gray-600 capitalize">{{ request.urgency_level }} Priority</span>
+                                </div>
+                                <span class="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Open</span>
+                            </div>
+                        </div>
+
+                        <h1 class="text-3xl font-bold text-gray-900 mb-4 leading-tight">{{ request.title }}</h1>
+                        
+                        <div class="flex flex-wrap items-center gap-6 text-sm text-gray-600 mb-4">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Posted {{ request.created_at|timesince }} ago
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                {{ request.location }}
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                3 people interested
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-8">
+                        <p class="text-lg text-gray-700 leading-relaxed">{{ request.description }}</p>
+                    </div>
+
+                    <!-- Request Details -->
+                    <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Request Details</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {% if request.preferred_time %}
+                            <div>
+                                <div class="text-sm font-medium text-gray-900 mb-1">Preferred Time</div>
+                                <div class="text-gray-600">{{ request.preferred_time }}</div>
+                            </div>
+                            {% endif %}
+                            {% if request.estimated_duration %}
+                            <div>
+                                <div class="text-sm font-medium text-gray-900 mb-1">Duration</div>
+                                <div class="text-gray-600">{{ request.estimated_duration }}</div>
+                            </div>
+                            {% endif %}
+                            {% if request.offer %}
+                            <div>
+                                <div class="text-sm font-medium text-gray-900 mb-1">Compensation</div>
+                                <div class="text-gray-600">{{ request.offer }}</div>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <div class="text-sm font-medium text-gray-900 mb-1">Skills Needed</div>
+                                <div class="text-gray-600">General assistance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photos -->
+                    {% if request.photo %}
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Photos</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <img src="{{ request.photo.url }}" alt="Request photo" 
+                                 class="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                 onclick="openLightbox(this.src)">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Community Responses -->
+                    <div class="border-t border-gray-200 pt-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-900">Community Responses</h3>
+                            <span class="px-3 py-1 text-sm font-medium bg-green-100 text-green-800 rounded-full">3 responses</span>
+                        </div>
+
+                        <!-- Sample Responses -->
+                        <div class="space-y-6">
+                            <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-semibold">J</div>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Jessica M.</div>
+                                            <div class="text-sm text-gray-600">⭐ 4.9 rating • 15 helps completed</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-gray-500">1 hour ago</div>
+                                </div>
+                                <p class="text-gray-700 mb-4">I'd be happy to help with this! I live just a few blocks away and do my own grocery shopping on weekday afternoons. Mrs. Johnson sounds like a lovely person, and I'd love to help out. I'm available tomorrow afternoon if that works?</p>
+                                <div class="flex space-x-3">
+                                    <button class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">Accept Help</button>
+                                    <button class="px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">Message</button>
+                                </div>
+                            </div>
+
+                            <div class="bg-white border border-gray-200 rounded-xl p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold">M</div>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Mike R.</div>
+                                            <div class="text-sm text-gray-600">⭐ 4.7 rating • 8 helps completed</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-gray-500">2 hours ago</div>
+                                </div>
+                                <p class="text-gray-700 mb-4">I can definitely help with this! I'm a regular at that supermarket and know it well. I'm free this afternoon and tomorrow morning. Would be glad to help Mrs. Johnson - community support is so important!</p>
+                                <div class="flex space-x-3">
+                                    <button class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">Accept Help</button>
+                                    <button class="px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">Message</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="request-detail">
-                <div class="request-main">
-                    <div class="request-header">
-                        <div class="request-type">{{request.category}}</div>
-                        <div class="urgency-indicator urgency-medium">
-                            <div class="urgency-dot"></div>
-                            <span>{{request.urgency}}</span>
-                            <span class="status-badge status-open">Open</span>
-                        </div>
-                        <h1 class="request-title">{{request.title}}</h1>
-                        <div class="request-meta">
-                            <div class="meta-item">
-                                <span>🕐</span>
-                                <span>Posted 2 hours ago</span>
-                            </div>
-                            <div class="meta-item">
-                                <span>📍</span>
-                                <span>{{request.location}}</span>
-                            </div>
-                            <div class="meta-item">
-                                <span>👥</span>
-                                <span>3 people interested</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="request-description">
-                        <p>{{request.description}}</p>
-
-                    </div>
-
-                    <div class="request-details">
-                        <h3 style="margin-bottom: 1rem; color: #333;">Request Details</h3>
-                        <div class="details-grid">
-                            <div class="detail-item">
-                                <div class="detail-label">Preferred Time</div>
-                                <div class="detail-value">{{request.preferred_time}}</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Duration</div>
-                                <div class="detail-value">{{request.estimated_duration}}</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Compensation</div>
-                                <div class="detail-value">{{request.offer}}</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Skills Needed</div>
-                                <div class="detail-value">{{request.skills}}</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="request-photos">
-                        <h3 style="margin-bottom: 1rem; color: #333;">Photos</h3>
-                        <div class="photos-grid">
-                            <img src="{{request.photo}}" alt="Shopping list">
-                        </div>
-                    </div>
-
-                    <div class="responses-section">
-                        <div class="responses-header">
-                            <h3>Community Responses</h3>
-                            <span class="status-badge status-open">3 responses</span>
-                        </div>
-
-                        <div class="response-card">
-                            <div class="response-header">
-                                <div class="responder-info">
-                                    <div class="responder-avatar">J</div>
-                                    <div>
-                                        <h4>Jessica M.</h4>
-                                        <div class="responder-stats">⭐ 4.9 rating • 15 helps completed</div>
-                                    </div>
-                                </div>
-                                <div class="response-time">1 hour ago</div>
-                            </div>
-                            <div class="response-message">
-                                I'd be happy to help with this! I live just a few blocks away and do my own grocery shopping on weekday afternoons. Mrs. Johnson sounds like a lovely person, and I'd love to help out. I'm available tomorrow afternoon if that works?
-                            </div>
-                            <div class="response-actions">
-                                <button class="btn btn-success btn-small">Accept Help</button>
-                                <button class="btn btn-outline btn-small">Message</button>
-                            </div>
-                        </div>
-
-                        <div class="response-card">
-                            <div class="response-header">
-                                <div class="responder-info">
-                                    <div class="responder-avatar">M</div>
-                                    <div>
-                                        <h4>Mike R.</h4>
-                                        <div class="responder-stats">⭐ 4.7 rating • 8 helps completed</div>
-                                    </div>
-                                </div>
-                                <div class="response-time">2 hours ago</div>
-                            </div>
-                            <div class="response-message">
-                                I can definitely help with this! I'm a regular at that supermarket and know it well. I'm free this afternoon and tomorrow morning. Would be glad to help Mrs. Johnson - community support is so important!
-                            </div>
-                            <div class="response-actions">
-                                <button class="btn btn-success btn-small">Accept Help</button>
-                                <button class="btn btn-outline btn-small">Message</button>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Offer Help -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Offer to Help</h3>
+                    <p class="text-gray-600 mb-6">Want to help {{ request.author.username }} with this request? Send a message to get started.</p>
+                    <button onclick="showOfferModal()" class="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 btn-hover transition-all duration-300">
+                        Offer Your Help
+                    </button>
                 </div>
 
-                <div class="request-sidebar">
-                    <div class="action-card">
-                        <h3>Offer to Help</h3>
-                        <p>Want to help {{request.author}} with this request? Send a message to get started.</p>
-                        <button class="btn btn-primary btn-large" style="width: 100%;" onclick="showOfferModal()">Offer Your Help</button>
-                        <a href="{% url 'conversation:new' request.id %}">
+                <!-- Requester Info -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Posted by</h3>
+                    <div class="flex items-center space-x-3 mb-4">
+                        {% if request.author.profile.profile_picture %}
+                            <img src="{{ request.author.profile.profile_picture.url }}" alt="{{ request.author.username }}" class="w-12 h-12 rounded-full object-cover">
+                        {% else %}
+                            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                                {{ request.author.username|first|upper }}
+                            </div>
+                        {% endif %}
+                        <div>
+                            <div class="font-medium text-gray-900">{{ request.author.username }}</div>
+                            <div class="text-sm text-gray-600">⭐ 5.0 rating • Member since 2023</div>
+                        </div>
                     </div>
-
-                    <div class="requester-info">
-                        <h3 style="margin-bottom: 1rem;">Offer Your Help</h3>
-            <p style="margin-bottom: 1.5rem; color: #666;">Send a message to {{request.author}} explaining how you can help with this request.</p>
-            <form id="offer-form">
-                <textarea placeholder="Hi {{request.author}} ! I'd love to help with your grocery shopping request..." style="width: 100%; min-height: 120px; padding: 1rem; border: 2px solid #e1e5e9; border-radius: 10px; margin-bottom: 1rem; font-family: inherit; resize: vertical;"></textarea>
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                        <button type="button" class="btn btn-outline" onclick="hideOfferModal()">Cancel</button>
-                    
-                    <button type="submit" class="btn btn-primary">Send Offer</button>
-                    </a>
+                    <p class="text-sm text-gray-600">Active community member who regularly helps neighbors with various tasks. Known for clear communication and appreciation.</p>
                 </div>
-            </form>
+
+                <!-- Location Info -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Location</h3>
+                    <p class="text-gray-900 mb-2"><strong>📍 {{ request.location }}</strong></p>
+                    <p class="text-sm text-gray-600 mb-4">Near Main Street and 5th Avenue</p>
+                    <div class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
+                        <span>Interactive Map</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</main>
 
-    <script>
-        // Modal functionality
-        function showOfferModal() {
-            document.getElementById('offer-modal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function hideOfferModal() {
-            document.getElementById('offer-modal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // Handle offer form submission
-        document.getElementById('offer-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const message = this.querySelector('textarea').value.trim();
-            
-            if (message.length < 10) {
-                alert('Please write a more detailed message (at least 10 characters).');
-                return;
-            }
-
-            // Simulate sending the offer
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
-            
-            setTimeout(() => {
-                alert('Your offer has been sent to {{request.author}}! They will be notified and can respond to you directly.');
-                hideOfferModal();
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-                this.reset();
-            }, 1500);
-        });
-
-        // Close modal when clicking outside
-        document.getElementById('offer-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideOfferModal();
-            }
-        });
-
-        // Escape key to close modal
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                hideOfferModal();
-            }
-        });
-
-        // Photo lightbox functionality
-        document.querySelectorAll('.photos-grid img').forEach(img => {
-            img.addEventListener('click', function() {
-                // Simple lightbox - in a real app, you'd use a proper lightbox library
-                const lightbox = document.createElement('div');
-                lightbox.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0,0,0,0.9);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 3000;
-                    cursor: pointer;
-                `;
-                
-                const lightboxImg = document.createElement('img');
-                lightboxImg.src = this.src;
-                lightboxImg.style.cssText = `
-                    max-width: 90%;
-                    max-height: 90%;
-                    object-fit: contain;
-                    border-radius: 10px;
-                `;
-                
-                lightbox.appendChild(lightboxImg);
-                document.body.appendChild(lightbox);
-                document.body.style.overflow = 'hidden';
-                
-                lightbox.addEventListener('click', function() {
-                    document.body.removeChild(lightbox);
-                    document.body.style.overflow = 'auto';
-                });
-            });
-        });
-
-        // Accept help functionality
-        document.querySelectorAll('.response-actions .btn-success').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (confirm('Are you sure you want to accept this person\'s help? This will notify them and mark the request as in progress.')) {
-                    // Simulate accepting help
-                    const responseCard = this.closest('.response-card');
-                    const responderName = responseCard.querySelector('h4').textContent;
-                    
-                    this.disabled = true;
-                    this.textContent = 'Accepted!';
-                    this.style.background = '#28a745';
-                    
-                    // Update status
-                    document.querySelectorAll('.status-badge').forEach(badge => {
-                        badge.className = 'status-badge status-in-progress';
-                        badge.textContent = 'In Progress';
-                    });
-                    
-                    setTimeout(() => {
-                        alert(`Great! You've accepted help from ${responderName}. They will be notified and you can coordinate the details through messages.`);
-                    }, 500);
-                }
-            });
-        });
-
-        // Message functionality
-        document.querySelectorAll('.response-actions .btn-outline').forEach(btn => {
-            if (btn.textContent === 'Message') {
-                btn.addEventListener('click', function() {
-                    const responseCard = this.closest('.response-card');
-                    const responderName = responseCard.querySelector('h4').textContent;
-                    alert(`Opening message thread with ${responderName}...`);
-                    // In a real app, this would open a messaging interface
-                });
-            }
-        });
-
-        // Simulate real-time updates
-        function simulateRealTimeUpdate() {
-            // Simulate a new response appearing
-            const responses = document.querySelector('.responses-section');
-            const responseCount = document.querySelectorAll('.response-card').length;
-            
-            if (responseCount < 5 && Math.random() > 0.7) {
-                // Add new response occasionally
-                const newResponse = document.createElement('div');
-                newResponse.className = 'response-card';
-                newResponse.innerHTML = `
-                    <div class="response-header">
-                        <div class="responder-info">
-                            <div class="responder-avatar">A</div>
-                            <div>
-                                <h4>Alex K.</h4>
-                                <div class="responder-stats">⭐ 4.8 rating • 12 helps completed</div>
-                            </div>
-                        </div>
-                        <div class="response-time">Just now</div>
-                    </div>
-                    <div class="response-message">
-                        I'm available to help and I'm very familiar with that area. I can go shopping this evening if that works for you!
-                    </div>
-                    <div class="response-actions">
-                        <button class="btn btn-success btn-small">Accept Help</button>
-                        <button class="btn btn-outline btn-small">Message</button>
-                    </div>
-                `;
-                
-                responses.appendChild(newResponse);
-                
-                // Update response count
-                const countBadge = document.querySelector('.responses-header .status-badge');
-                countBadge.textContent = `${responseCount + 1} responses`;
-                
-                const metaCount = document.querySelector('.meta-item:last-child span:last-child');
-                metaCount.textContent = `${responseCount + 1} people interested`;
-            }
-        }
-
-        // Run real-time update simulation every 30 seconds
-        setInterval(simulateRealTimeUpdate, 30000);
-
-        // Add smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    </script>
-</body>
-</html>Posted by</h3>
-                        <div class="requester-profile">
-                            <div class="requester-avatar">S</div>
-                            <div class="requester-details">
-                                <h4 {{request.author}} M.</h4>
-                                <div class="requester-stats">⭐ 5.0 rating • Member since 2023</div>
-                            </div>
-                        </div>
-                        <p style="color: #666; font-size: 0.9rem;">Active community member who regularly helps neighbors with various tasks. Known for clear communication and appreciation.</p>
-                    </div>
-
-                    <div class="location-info">
-                        <h3 style="margin-bottom: 1rem;">Location</h3>
-                        <p style="color: #666; margin-bottom: 0.5rem;"><strong>📍 Downtown Area</strong></p>
-                        <p style="color: #666; font-size: 0.9rem;">Near Main Street and 5th Avenue</p>
-                        <div class="map-placeholder">
-                            <span>Interactive Map</span>
-                        </div>
-                    </div>
-                </div>
+<!-- Offer Help Modal -->
+<div id="offer-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-auto">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Offer Your Help</h3>
+        <p class="text-gray-600 mb-6">Send a message to {{ request.author.username }} explaining how you can help with this request.</p>
+        <form id="offer-form">
+            <textarea placeholder="Hi {{ request.author.username }}! I'd love to help with your grocery shopping request..." 
+                      class="w-full min-h-32 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y mb-4"
+                      required></textarea>
+            <div class="flex space-x-3">
+                <button type="button" onclick="hideOfferModal()" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+                <button type="submit" class="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300">
+                    Send Offer
+                </button>
             </div>
-        </div>
-    </main>
+        </form>
+    </div>
+</div>
 
-    <!-- Offer Help Modal (Hidden by default) -->
-    <div id="offer-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
-        <div style="background: white; border-radius: 20px; padding: 2rem; max-width: 500px; margin: 2rem;">
-            <h3 style="margin-bottom: 1rem;">
+<!-- Lightbox for photos -->
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4" onclick="closeLightbox()">
+    <img id="lightbox-img" class="max-w-full max-h-full object-contain rounded-lg">
+</div>
+
+<script>
+    // Modal functionality
+    function showOfferModal() {
+        document.getElementById('offer-modal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function hideOfferModal() {
+        document.getElementById('offer-modal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Lightbox functionality
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Handle offer form submission
+    document.getElementById('offer-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const message = this.querySelector('textarea').value.trim();
+        
+        if (message.length < 10) {
+            alert('Please write a more detailed message (at least 10 characters).');
+            return;
+        }
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        
+        setTimeout(() => {
+            alert('Your offer has been sent to {{ request.author.username }}! They will be notified and can respond to you directly.');
+            hideOfferModal();
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            this.reset();
+        }, 1500);
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('offer-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            hideOfferModal();
+        }
+    });
+
+    // Escape key to close modals
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            hideOfferModal();
+            closeLightbox();
+        }
+    });
+
+    // Accept help functionality
+    document.querySelectorAll('button:contains("Accept Help")').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to accept this person\'s help? This will notify them and mark the request as in progress.')) {
+                const responseCard = this.closest('.bg-white');
+                const responderName = responseCard.querySelector('.font-medium').textContent;
+                
+                this.disabled = true;
+                this.textContent = 'Accepted!';
+                this.className = this.className.replace('bg-green-600', 'bg-green-700');
+                
+                setTimeout(() => {
+                    alert(`Great! You've accepted help from ${responderName}. They will be notified and you can coordinate the details through messages.`);
+                }, 500);
+            }
+        });
+    });
+</script>
 {% endblock %}

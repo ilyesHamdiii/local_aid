@@ -1,206 +1,251 @@
 {% extends "aid/base.html" %}
-{%block content%}
-<body class="home">
-  
-    <section class="hero">
-      <div class="container">
-        <h1>Help Your Neighbors</h1>
-        <p>
-          Connect with your community through mutual aid. Post requests for help
-          or offer your skills to make a difference locally.
+{% load static %}
+
+{% block title %}Home - RequestHub{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-purple-50 via-white to-blue-50">
+    <div class="container mx-auto px-4 py-20">
+        <div class="text-center max-w-4xl mx-auto">
+            <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-purple-100 text-purple-700 border-purple-200 mb-4">
+                🚀 Connecting Communities, One Request at a Time
+            </div>
+            <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                Get Help. Give Help. 
+                <span class="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    Build Community.
+                </span>
+            </h1>
+            <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                RequestHub connects people who need help with those who can provide it. 
+                Whether you're looking for assistance or want to lend a hand, join our 
+                thriving community today.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{% url 'aid:requests' %}" class="inline-flex items-center justify-center px-8 py-3 rounded-md text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 btn-hover transition-all duration-300">
+                    Browse Requests
+                    <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+                <a href="{% url 'aid:post_request' %}" class="inline-flex items-center justify-center px-8 py-3 rounded-md text-sm font-medium text-gray-900 bg-white border border-gray-300 hover:bg-gray-50 btn-hover transition-all duration-300">
+                    Post a Request
+                    <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-purple-100 text-purple-600 rounded-lg mb-4">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-gray-900 mb-2">2,847</div>
+                <div class="text-gray-600">Active Requests</div>
+            </div>
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 text-green-600 rounded-lg mb-4">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-gray-900 mb-2">15,632</div>
+                <div class="text-gray-600">Completed</div>
+            </div>
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-600 rounded-lg mb-4">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-gray-900 mb-2">28,419</div>
+                <div class="text-gray-600">Community Members</div>
+            </div>
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-yellow-100 text-yellow-600 rounded-lg mb-4">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-gray-900 mb-2">94%</div>
+                <div class="text-gray-600">Success Rate</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                How RequestHub Works
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Our platform makes it simple to connect, collaborate, and get things done together.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center border-none">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg mx-auto mb-4">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Post Your Need</h3>
+                <p class="text-gray-600">
+                    Share what you need help with - from grocery runs to tech support, 
+                    moving assistance to pet care.
+                </p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center border-none">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg mx-auto mb-4">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Connect Locally</h3>
+                <p class="text-gray-600">
+                    Find neighbors willing to help or offer your own skills to support 
+                    your community.
+                </p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center border-none">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg mx-auto mb-4">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Build Community</h3>
+                <p class="text-gray-600">
+                    Strengthen neighborhood bonds through acts of mutual aid and 
+                    reciprocal support.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Requests Section -->
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center mb-12">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Recent Requests</h2>
+                <p class="text-gray-600">See what the community is asking for help with</p>
+            </div>
+            <a href="{% url 'aid:requests' %}" class="inline-flex items-center justify-center px-6 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 btn-hover transition-all duration-300">
+                View All
+                <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">Errands</span>
+                    <span class="text-sm text-gray-500">2 hours ago</span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2 leading-tight">Help with grocery shopping</h3>
+                <p class="text-gray-600 text-sm mb-4">Looking for someone to help pick up groceries for an elderly neighbor who can't get out easily...</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center text-sm text-gray-600">
+                        <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                        12 responses
+                        <svg class="h-4 w-4 ml-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                        </svg>
+                        4.8
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">Moving</span>
+                    <span class="text-sm text-gray-500">4 hours ago</span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2 leading-tight">Moving boxes - need 2 people</h3>
+                <p class="text-gray-600 text-sm mb-4">Moving to a new apartment this weekend and need help carrying boxes down 2 flights of stairs...</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center text-sm text-gray-600">
+                        <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                        8 responses
+                        <svg class="h-4 w-4 ml-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                        </svg>
+                        4.9
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">Pet Care</span>
+                    <span class="text-sm text-gray-500">1 day ago</span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2 leading-tight">Dog walking while I'm away</h3>
+                <p class="text-gray-600 text-sm mb-4">Going out of town for 3 days and need someone to walk my friendly golden retriever twice a day...</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center text-sm text-gray-600">
+                        <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                        15 responses
+                        <svg class="h-4 w-4 ml-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                        </svg>
+                        4.7
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">
+            Ready to Join Our Community?
+        </h2>
+        <p class="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+            Whether you need help or want to help others, RequestHub is the perfect place to connect 
+            with your community and make a difference.
         </p>
-        <div class="hero-buttons">
-          <a href="browse.html" class="btn btn-primary">Browse Requests</a>
-          <a
-            href="post.html"
-            class="btn btn-outline"
-            style="
-              background: rgba(255, 255, 255, 0.2);
-              color: white;
-              border-color: rgba(255, 255, 255, 0.5);
-            "
-            >Post a Request</a
-          >
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'aid:post_request' %}" class="inline-flex items-center justify-center px-8 py-3 bg-white text-purple-600 rounded-md text-sm font-medium hover:bg-gray-100 btn-hover transition-all duration-300">
+                Post Your First Request
+                <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+            </a>
+            <a href="{% url 'aid:requests' %}" class="inline-flex items-center justify-center px-8 py-3 border border-white text-white rounded-md text-sm font-medium hover:bg-white hover:text-purple-600 btn-hover transition-all duration-300">
+                Start Helping Others
+                <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </a>
         </div>
-      </div>
-    </section>
-
-    <section class="features">
-      <div class="container">
-        <h2>How It Works</h2>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">📝</div>
-            <h3>Post Your Need</h3>
-            <p>
-              Share what you need help with - from grocery runs to tech support,
-              moving assistance to pet care.
-            </p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">👥</div>
-            <h3>Connect Locally</h3>
-            <p>
-              Find neighbors willing to help or offer your own skills to support
-              your community.
-            </p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🤝</div>
-            <h3>Build Community</h3>
-            <p>
-              Strengthen neighborhood bonds through acts of mutual aid and
-              reciprocal support.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="recent-requests">
-      <div class="container">
-        <h2>Recent Requests</h2>
-        <div class="request-grid">
-          <div class="request-card">
-            <div class="request-header">
-              <div>
-                <div class="request-title">Help with grocery shopping</div>
-                <div class="request-meta">Posted 2 hours ago</div>
-              </div>
-              <div class="request-type">Errands</div>
-            </div>
-            <div class="request-description">
-              Looking for someone to help pick up groceries for an elderly
-              neighbor who can't get out easily. Just basic items from the local
-              supermarket.
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Downtown Area</div>
-              <a href="#" class="btn btn-primary btn-small"
-                >Offer Help</a
-              >
-            </div>
-          </div>
-
-          <div class="request-card">
-            <div class="request-header">
-              <div>
-                <div class="request-title">Moving boxes - need 2 people</div>
-                <div class="request-meta">Posted 5 hours ago</div>
-              </div>
-              <div class="request-type">Moving</div>
-            </div>
-            <div class="request-description">
-              Moving to a new apartment this weekend and need help carrying
-              boxes down 2 flights of stairs. Should take about 2 hours.
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Riverside District</div>
-              <a
-                href="#"
-                class="btn btn-primary btn-small"
-                >Offer Help</a
-              >
-            </div>
-          </div>
-
-          <div class="request-card">
-            <div class="request-header">
-              <div>
-                <div class="request-title">Dog walking while I'm away</div>
-                <div class="request-meta">Posted 1 day ago</div>
-              </div>
-              <div class="request-type">Pet Care</div>
-            </div>
-            <div class="request-description">
-              Going out of town for 3 days and need someone to walk my friendly
-              golden retriever twice a day. All supplies provided.
-            </div>
-            <div class="request-footer">
-              <div class="request-location">📍 Oak Street</div>
-              <a
-                href="#"
-                class="btn btn-primary btn-small"
-                >Offer Help</a
-              >
-            </div>
-          </div>
-        </div>
-        <div style="text-align: center; margin-top: 3rem">
-          <a href="{% url 'aid:requests'%}" class="btn btn-primary"
-            >View All Requests</a
-          >
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-links">
-          <a href="#">About</a>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Contact</a>
-          <a href="#">Help</a>
-        </div>
-        <p>
-          &copy; 2024 MutualAid. Building stronger communities through mutual
-          support.
-        </p>
-      </div>
-    </footer>
-</body>
-
-
-    <script>
-      // Mobile menu toggle (basic implementation)
-      document
-        .querySelector(".mobile-menu")
-        ?.addEventListener("click", function () {
-          const navLinks = document.querySelector(".nav-links");
-          navLinks.style.display =
-            navLinks.style.display === "flex" ? "none" : "flex";
-        });
-
-      // Smooth scrolling for anchor links
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute("href"));
-          if (target) {
-            target.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }
-        });
-      });
-
-      // Add some interactive animations
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
-          }
-        });
-      }, observerOptions);
-
-      // Animate feature cards and request cards on scroll
-      document
-        .querySelectorAll(".feature-card, .request-card")
-        .forEach((card) => {
-          card.style.opacity = "0";
-          card.style.transform = "translateY(30px)";
-          card.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-          observer.observe(card);
-        });
-    </script>
-  </body>
+    </div>
+</section>
 {% endblock %}
-</html>

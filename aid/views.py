@@ -2,10 +2,21 @@ from django.shortcuts import render,redirect
 from .models import Request, Category, Location
 from django.core.paginator import Paginator
 from user.models import UserProfile
+from django.http  import HttpResponse
+
+
+
+
 
 def base_view(request):
-    return render(request,"aid/base.html")
+    if  not request.user.is_authenticated:
+        return redirect("user:login")
+    nb=Request.objects.filter(user=request.user).first()
+    profile = UserProfile.objects.filter(user=request.user).first()
+    print("profile",profile)
+    return render(request, 'aid/base.html',{"profile":profile})
 def home_view(request):
+    return render(request,"aid/home.html")
     if  not request.user.is_authenticated:
         return redirect("user:login")
     profile = UserProfile.objects.filter(user=request.user).first()
@@ -75,3 +86,15 @@ def requests_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'aid/requests.html', {'page_obj': page_obj})
+def edit_request(request):
+    pass
+def delete_request(request,request_id):
+    requestt = Request.objects.get(id=request_id)
+    if requestt.author != request.user:
+        return HttpResponse("Unauthorized", status=401)
+
+    requestt.delete()
+    return redirect("aid:my_requests")
+def my_requests(request):   
+    requests=Request.objects.filter(author=request.user)
+    return render(request,"aid/my_requests.html",{"user_requests":requests})
