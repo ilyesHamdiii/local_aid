@@ -17,8 +17,6 @@ urlpatterns = [
     path('edit/<int:request_id>', edit_request, name='edit_request'),
     path('request/<int:request_id>/delete/', delete_request, name='delete_request'),
     path('my-requests/', my_requests, name='my_requests'),
-
-
 ]
 
 if settings.DEBUG:

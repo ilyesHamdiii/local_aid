@@ -13,7 +13,7 @@
             </p>
         </div>
 
-        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8">
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8 ">
             <div class="flex items-start">
                 <svg class="w-6 h-6 text-blue-600 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -78,13 +78,13 @@
                 </div>
 
                 <div class="space-y-3">
-                    <label class="block text-sm font-semibold text-gray-900">
+                    <label class="block text-sm font-semibold text-gray-900 no-auto-delete">
                         Urgency Level <span class="text-red-500">*</span>
                     </label>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 no-auto-delete">
                         <label class="relative">
                             <input type="radio" name="urgency" value="low" required class="sr-only peer">
-                            <div class="p-4 border-2 border-gray-200 rounded-xl cursor-pointer transition-all peer-checked:border-green-500 peer-checked:bg-green-50 hover:border-green-300">
+                            <div class="p-4 border-2 border-gray-200 rounded-xl cursor-pointer transition-all peer-checked:border-green-500 peer-checked:bg-green-50 hover:border-green-300 no-auto-delete">
                                 <div class="flex items-center justify-center mb-2">
                                     <div class="w-3 h-3 bg-green-500 rounded-full"></div>
                                 </div>
@@ -97,7 +97,7 @@
 
                         <label class="relative">
                             <input type="radio" name="urgency" value="medium" required class="sr-only peer">
-                            <div class="p-4 border-2 border-gray-200 rounded-xl cursor-pointer transition-all peer-checked:border-yellow-500 peer-checked:bg-yellow-50 hover:border-yellow-300">
+                            <div class="p-4 border-2 border-gray-200 rounded-xl cursor-pointer transition-all peer-checked:border-yellow-500 peer-checked:bg-yellow-50 hover:border-yellow-300 no-auto-delete">
                                 <div class="flex items-center justify-center mb-2">
                                     <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
                                 </div>
@@ -110,7 +110,7 @@
 
                         <label class="relative">
                             <input type="radio" name="urgency" value="high" required class="sr-only peer">
-                            <div class="p-4 border-2 border-gray-200 rounded-xl cursor-pointer transition-all peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-red-300">
+                            <div class="p-4 border-2 border-gray-200 rounded-xl cursor-pointer transition-all peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-red-300 no-auto-delete">
                                 <div class="flex items-center justify-center mb-2">
                                     <div class="w-3 h-3 bg-red-500 rounded-full"></div>
                                 </div>
@@ -267,23 +267,24 @@
         localStorage.setItem("requesthub_draft", JSON.stringify(draft));
     }
 
-    function loadDraft() {
-        const draft = localStorage.getItem("requesthub_draft");
-        if (draft) {
-            const data = JSON.parse(draft);
-            Object.keys(data).forEach((key) => {
-                const field = form.querySelector(`[name="${key}"]`);
-                if (field) {
-                    if (field.type === "radio") {
-                        const radio = form.querySelector(`[name="${key}"][value="${data[key]}"]`);
-                        if (radio) radio.checked = true;
-                    } else {
-                        field.value = data[key];
-                    }
+   function loadDraft() {
+    const draft = localStorage.getItem("requesthub_draft");
+    if (draft) {
+        const data = JSON.parse(draft);
+        Object.keys(data).forEach((key) => {
+            const fields = form.querySelectorAll(`[name="${key}"]`);
+            if (fields.length) {
+                if (fields[0].type === "radio") {
+                    fields.forEach((field) => {
+                        field.checked = field.value === data[key];
+                    });
+                } else {
+                    fields[0].value = data[key];
                 }
-            });
-        }
+            }
+        });
     }
+}
 
     // Auto-save draft every 30 seconds
     setInterval(saveDraft, 30000);

@@ -149,12 +149,13 @@
 
         // Auto-hide alerts after 5 seconds
         setTimeout(() => {
-            document.querySelectorAll('[class*="bg-red-50"], [class*="bg-yellow-50"], [class*="bg-green-50"], [class*="bg-blue-50"]').forEach(alert => {
+            document.querySelectorAll('[class*="bg-blue-50"]').forEach(alert => {
                 if (alert.parentElement) {
                     alert.style.transition = 'opacity 0.5s ease';
                     alert.style.opacity = '0';
                     setTimeout(() => {
-                        alert.remove();
+                        if (!alert.classList.contains('no-auto-delete')) {
+                        alert.remove();}
                     }, 500);
                 }
             });

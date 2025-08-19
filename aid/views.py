@@ -23,8 +23,10 @@ def request_detail_view(request, request_id):
         request_detail = Request.objects.get(id=request_id)
     except Request.DoesNotExist:
         return render(request, 'aid/request_not_found.html', {'request_id': request_id})
+    profile=UserProfile.objects.filter(user=request_detail.author).first()
     context = {
         'request': request_detail,
+        "profile":profile
     }
     return render(request, 'aid/request_detail.html', context)
 
@@ -97,6 +99,8 @@ def requests(request):
         'locations': locations,
         "profile": profile
     }
+    print(categories)
+    print("context",context)
     return render(request, 'aid/requests.html', context)
 
 def requests_list(request):
@@ -133,6 +137,7 @@ def edit_request(request, request_id):
         req.preferred_time = request.POST.get('preferred-time', req.preferred_time)
         req.estimated_duration = request.POST.get('duration', req.estimated_duration)
         req.offer = request.POST.get('compensation', req.offer)
+        req.status=request.POST.get('status',req.status)
         
         photo = request.FILES.get('photos')
         if photo:
@@ -167,7 +172,7 @@ def my_requests(request):
     # Calculate stats
     total_requests = user_requests.count()
     open_requests = user_requests.filter(status='open').count()
-    completed_requests = user_requests.filter(status='completed').count()
+    completed_requests = user_requests.filter(status='closed').count()
     total_responses = 0  # You'll need to implement this based on your response model
     
     context = {

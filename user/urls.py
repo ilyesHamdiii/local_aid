@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path,include
-from .views import login_view,register_view,logout_view,profile_view
+from .views import login_view,register_view,logout_view,profile_view,profile_user_view
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -10,6 +10,7 @@ urlpatterns = [
     path('register',register_view, name='register'),
     path('logout', logout_view, name='logout'),
     path('profile', profile_view, name='profile'),
+    path("profile/<str:request_author>",profile_user_view,name="profile_view"),
     path('', include('conversation.urls')),
     path('', include('dashboard.urls')),
 

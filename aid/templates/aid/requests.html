@@ -1,325 +1,28 @@
-<!DOCTYPE html>
-{% extends "aid/base.html" %} {% block content %}
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Browse Requests - MutualAid</title>
+{% extends "aid/base.html" %} 
+{% load static %}
 
-        <style>
-      .main-content {
-        margin-top: 90px;
-        padding: 2rem;
-      }
+{% block title %}Browse Requests - RequestHub{% endblock %}
 
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-      }
+{% block content %}
+<main class="main-content">
+  <div class="container">
+    <div class="page-header">
+      <h1>Browse Help Requests</h1>
+      <p>
+        Find ways to help your neighbors or discover community support
+        opportunities near you.
+      </p>
+    </div>
 
-      .page-header {
-        text-align: center;
-        margin-bottom: 3rem;
-      }
-
-      .page-header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        color: #333;
-      }
-
-      .page-header p {
-        font-size: 1.1rem;
-        color: #666;
-        max-width: 600px;
-        margin: 0 auto;
-      }
-
-      .filters-section {
-        background: white;
-        border-radius: 15px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      }
-
-      .filters-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        align-items: end;
-      }
-
-      .filter-group {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .filter-group label {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        color: #333;
-      }
-
-      .filter-group select,
-      .filter-group input {
-        padding: 0.75rem;
-        border: 2px solid #e1e5e9;
-        border-radius: 10px;
-        font-size: 1rem;
-        transition: border-color 0.3s ease;
-      }
-
-      .filter-group select:focus,
-      .filter-group input:focus {
-        outline: none;
-        border-color: #667eea;
-      }
-
-      .search-input {
-        grid-column: span 2;
-      }
-
-      .search-input input {
-        width: 100%;
-      }
-
-      .results-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
-
-      .results-count {
-        font-size: 1.1rem;
-        color: #666;
-      }
-
-      .view-toggle {
-        display: flex;
-        background: white;
-        border-radius: 10px;
-        padding: 0.25rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .view-toggle button {
-        padding: 0.5rem 1rem;
-        border: none;
-        background: transparent;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .view-toggle button.active {
-        background: #667eea;
-        color: white;
-      }
-
-      .requests-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2rem;
-      }
-
-      .request-card {
-        background: white;
-        border-radius: 15px;
-        padding: 2rem;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        cursor: pointer;
-      }
-
-      .request-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      }
-
-      .request-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 1rem;
-      }
-
-      .request-title {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 0.5rem;
-      }
-
-      .request-type {
-        padding: 0.3rem 0.8rem;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: white;
-      }
-
-      .request-type.errands {
-        background: #28a745;
-      }
-      .request-type.moving {
-        background: #ffc107;
-        color: #333;
-      }
-      .request-type.pet-care {
-        background: #17a2b8;
-      }
-      .request-type.tech {
-        background: #6f42c1;
-      }
-      .request-type.food {
-        background: #fd7e14;
-      }
-      .request-type.other {
-        background: #6c757d;
-      }
-
-      .request-meta {
-        display: flex;
-        gap: 1rem;
-        color: #666;
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
-      }
-
-      .request-description {
-        color: #555;
-        line-height: 1.6;
-        margin-bottom: 1.5rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      .request-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
-
-      .request-location {
-        color: #666;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-        gap: 0.3rem;
-      }
-
-      .btn-small {
-        padding: 0.4rem 1rem;
-        font-size: 0.9rem;
-      }
-
-      .urgency-indicator {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        margin-left: 0.5rem;
-      }
-
-      .urgency-low {
-        background: #28a745;
-      }
-      .urgency-medium {
-        background: #ffc107;
-      }
-      .urgency-high {
-        background: #dc3545;
-      }
-
-      .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 3rem;
-      }
-
-      .pagination button {
-        padding: 0.5rem 1rem;
-        border: 2px solid #e1e5e9;
-        background: white;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .pagination button:hover {
-        border-color: #667eea;
-        color: #667eea;
-      }
-
-      .pagination button.active {
-        background: #667eea;
-        color: white;
-        border-color: #667eea;
-      }
-
-      .no-results {
-        text-align: center;
-        padding: 4rem 2rem;
-        color: #666;
-      }
-
-      .no-results h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-      }
-
-      @media (max-width: 768px) {
-        .filters-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .search-input {
-          grid-column: span 1;
-        }
-
-        .results-header {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .requests-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .request-footer {
-          flex-direction: column;
-          align-items: stretch;
-        }
-      }
-      
-    </style>
-  </head>
-  <body>
-    <main class="main-content">
-      <div class="container">
-        <div class="page-header">
-          <h1>Browse Help Requests</h1>
-          <p>
-            Find ways to help your neighbors or discover community support
-            opportunities near you.
-          </p>
-        </div>
-
-        <div class="filters-section">
-          <div class="filters-grid">
-            <div class="filter-group">
-              <label for="category">Category</label>
-              <select id="category">
-                <option value="">All Categories</option>
+    <div class="filters-section">
+      <div class="filters-grid">
+        <div class="filter-group">
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+              <option value="{{ category.name }}">{{ category.name }}</option>
+            {% endfor %}
                 <option value="Errands">Errands</option>
                 <option value="Moving">Moving</option>
                 <option value="Pet care">Pet Care</option>
@@ -328,211 +31,541 @@
                 <option value="childcare">childcare</option>
                 <option value="home and garden">childcare</option>
                 <option value="other">Other</option>
-              </select>
-            </div>
-          </div>
-          <div class="filter-group">
-            <label for="location">Location</label>
-            <select id="location">
-              <option value="">All Areas</option>
-              <option value="Downtown">Downtown</option>
+
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="location">Location</label>
+          <select id="location">
+            <option value="">All Areas</option>
+
+          
+                <option value="Downtown">Downtown</option>
               <option value="Riverside District">Riverside District</option>
               <option value="Oak street">Oak Street</option>
               <option value="Hill side">Hillside</option>
               <option value="Market Square">Market Square</option>
               <option value="West Side">West Side</option>
               <option value="East End">East End</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="urgency">Urgency</label>
-            <select id="urgency">
-              <option value="">Any Urgency</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-          </div>
-
-          <div class="filter-group search-input">
-            <label for="search">Search</label>
-            <input type="text" id="search" placeholder="Search requests..." />
-          </div>
+          </select>
         </div>
 
-        <div class="results-header">
-          <div class="results-count">
-            <span id="results-count">24</span> requests found
-          </div>
-          <div class="view-toggle">
-            <button class="active" data-view="grid">Grid</button>
-            <button data-view="list">List</button>
-          </div>
+        <div class="filter-group">
+          <label for="urgency">Urgency</label>
+          <select id="urgency">
+            <option value="">Any Urgency</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
         </div>
 
-        <div class="requests-grid" id="requests-container">
-          {% for request in page_obj %}
-          <div
-            class="request-card"
-            data-category="{{request.category|lower}}"
-            data-location="{{request.location|lower}}"
-            data-urgency="{{request.urgency_level|lower}}"
-          >
-            <div class="request-header">
-              <div>
-                <div class="responder-avatar"><img  src="{{ profile.profile_picture}}" alt="Item image"  class="profilepic"  height=45px width=45px ></div>
-                <div class="request-title">{{request.title}}</div>
-                <div class="request-meta">
-                  <span>Posted 2 hours ago</span>
-                  <span>•</span>
-                  <span>{{request.author}}</span>
-                  <div class="urgency-indicator urgency-medium"></div>
-                </div>
-              </div>
-              <div class="request-type errands">{{request.category}}</div>
-            </div>
-            <div class="request-description">{{request.description}}</div>
-            <div class="request-footer">
-              <div class="request-location">📍 {{request.location}}</div>
-              <a
-                href="{% url 'aid:request_detail' request.id%}"
-                class="btn btn-primary btn-small"
-                >Offer Help</a
-              >
-            </div>
-          </div>
-          {% empty %}
-          <div class="no-results">
-            <h3>No requests found.</h3>
-          </div>
-          {% endfor %}
-        </div>
-
-        <div class="pagination">
-          {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}" class="btn">&larr; Previous</a>
-          {% endif %}
-          {% for num in page_obj.paginator.page_range %}
-            {% if num == page_obj.number %}
-              <span class="btn active">{{ num }}</span>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-              <a href="?page={{ num }}" class="btn">{{ num }}</a>
-            {% endif %}
-          {% endfor %}
-          {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="btn">Next &rarr;</a>
-          {% endif %}
+        <div class="filter-group search-input">
+          <label for="search">Search</label>
+          <input type="text" id="search" placeholder="Search requests..." />
         </div>
       </div>
-    </main>
+    </div>
 
-    <script>
-      // Filter functionality
-      const categoryFilter = document.getElementById("category");
-      const locationFilter = document.getElementById("location");
-      const urgencyFilter = document.getElementById("urgency");
-      const searchInput = document.getElementById("search");
-      const requestCards = document.querySelectorAll(".request-card");
-      const resultsCount = document.getElementById("results-count");
+    <div class="results-header">
+      <div class="results-count">
+        <span id="results-count">{{ page_obj.paginator.count }}</span> requests found
+      </div>
+      <div class="view-toggle">
+        <button class="active" data-view="grid">Grid</button>
+        <button data-view="list">List</button>
+      </div>
+    </div>
 
-      function filterRequests() {
-        const category = categoryFilter.value.toLowerCase();
-        const location = locationFilter.value.toLowerCase();
-        const urgency = urgencyFilter.value.toLowerCase();
-        const search = searchInput.value.toLowerCase();
+    <div class="requests-grid" id="requests-container">
+      {% for request in page_obj %}
+      <div
+        class="request-card"
+        data-category="{{ request.category.name|lower }}"
+        data-location="{{ request.location.name|lower }}"
+        data-urgency="{{ request.urgency_level|lower }}"
+      >
+        <div class="request-header">
+          <div>
+            <div class="responder-avatar">
+              {% if request.author.userprofile.profile_picture %}
+                <img src="{{ request.author.userprofile.profile_picture.url }}" 
+                     alt="{{ request.author }}" 
+                     class="profilepic" 
+                     height="45" 
+                     width="45">
+              {% else %}
+                <div class="profilepic default-avatar" style="height: 45px; width: 45px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">
+                  {{ request.author|first|upper }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="request-title">{{ request.title }}</div>
+            <div class="request-meta">
+              <span>Posted {{ request.time_posted|timesince }} ago</span>
+              <span>•</span>
+              <a href="{% url 'user:profile_view' request.author  %}" class="author-link">{{ request.author }}</a>
+              <div class="urgency-indicator urgency-{{ request.urgency_level|lower }}"></div>
+            </div>
+          </div>
+          <div class="request-type 
+            {% if request.category.name == 'Errands & Shopping' %}errands
+            {% elif request.category.name == 'Moving & Transportation' %}moving
+            {% elif request.category.name == 'Pet Care' %}pet-care
+            {% elif request.category.name == 'Tech Help' %}tech
+            {% elif request.category.name == 'Food & Meals' %}food
+            {% else %}other{% endif %}">
+            {{ request.category.name }}
+          </div>
+        </div>
+        <div class="request-description">{{ request.description|truncatewords:25 }}</div>
+        <div class="request-footer">
+          <div class="request-location">📍 {{ request.location.name }}</div>
+          <a
+            href="{% url 'aid:request_detail' request.id %}"
+            class="btn btn-primary btn-small"
+            >Offer Help</a
+          >
+        </div>
+      </div>
+      {% empty %}
+      <div class="no-results">
+        <h3>No requests found.</h3>
+        <p>Try adjusting your filters or search terms.</p>
+      </div>
+      {% endfor %}
+    </div>
 
-        let visibleCount = 0;
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn">&larr; Previous</a>
+      {% endif %}
+      {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}
+          <span class="btn active">{{ num }}</span>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a href="?page={{ num }}" class="btn">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn">Next &rarr;</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</main>
 
-        requestCards.forEach((card) => {
+<style>
+  .main-content {
+    margin-top: 90px;
+    padding: 2rem;
+  }
 
-          const cardCategory = card.dataset.category;
-          const cardLocation = card.dataset.location;
-          const cardUrgency = card.dataset.urgency;
-          const cardText = card.textContent.toLowerCase();
-          console.log(
-            `Filtering: ${cardCategory}, ${cardLocation}, ${cardUrgency}`
-          );
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
 
-          const categoryMatch = !category || cardCategory.toLowerCase().trim() === category;
-          const locationMatch = !location || cardLocation.toLowerCase().trim() === location;
-          const urgencyMatch = !urgency || cardUrgency.toLowerCase().trim() === urgency;
-           const searchMatch = !search || cardText.includes(search);7
-          console.log({
-            category, cardCategory,
-            categoryMatch,
-            location, cardLocation,
-            locationMatch,
-            urgency, cardUrgency,
-            urgencyMatch
-        });
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
 
+  .page-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+  }
 
-          if (categoryMatch && locationMatch && urgencyMatch && searchMatch) {
-            card.style.display = "block";
-            visibleCount++;
-          } else {
-            card.style.display = "none";
-          }
-        });
+  .filters-section {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
 
-        resultsCount.textContent = visibleCount;
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    align-items: end;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-group label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  .filter-group select,
+  .filter-group input {
+    padding: 0.75rem;
+    border: 2px solid #e1e5e9;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  .filter-group select:focus,
+  .filter-group input:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+
+  .search-input {
+    grid-column: span 2;
+  }
+
+  .search-input input {
+    width: 100%;
+  }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .results-count {
+    font-size: 1.1rem;
+    color: #666;
+  }
+
+  .view-toggle {
+    display: flex;
+    background: white;
+    border-radius: 10px;
+    padding: 0.25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .view-toggle button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .view-toggle button.active {
+    background: #667eea;
+    color: white;
+  }
+
+  .requests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  .request-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .request-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .responder-avatar {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .profilepic {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e1e5e9;
+  }
+
+  .request-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .request-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .author-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .author-link:hover {
+    text-decoration: underline;
+  }
+
+  .request-type {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+  }
+
+  .request-type.errands {
+    background: #28a745;
+  }
+  .request-type.moving {
+    background: #ffc107;
+    color: #333;
+  }
+  .request-type.pet-care {
+    background: #17a2b8;
+  }
+  .request-type.tech {
+    background: #6f42c1;
+  }
+  .request-type.food {
+    background: #fd7e14;
+  }
+  .request-type.other {
+    background: #6c757d;
+  }
+
+  .request-description {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .request-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .request-location {
+    color: #666;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  }
+
+  .btn-small {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .urgency-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+  }
+
+  .urgency-low {
+    background: #28a745;
+  }
+  .urgency-medium {
+    background: #ffc107;
+  }
+  .urgency-high {
+    background: #dc3545;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .pagination .btn {
+    padding: 0.5rem 1rem;
+    background: white;
+    color: #667eea;
+    border: 2px solid #e1e5e9;
+  }
+
+  .pagination .btn:hover {
+    border-color: #667eea;
+  }
+
+  .pagination .btn.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+  }
+
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+  }
+
+  .no-results h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .filters-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .search-input {
+      grid-column: span 1;
+    }
+
+    .results-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .requests-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .request-footer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>
+
+<script>
+  // Filter functionality
+  const categoryFilter = document.getElementById("category");
+  const locationFilter = document.getElementById("location");
+  const urgencyFilter = document.getElementById("urgency");
+  const searchInput = document.getElementById("search");
+  const requestCards = document.querySelectorAll(".request-card");
+  const resultsCount = document.getElementById("results-count");
+
+  function filterRequests() {
+    const category = categoryFilter.value.toLowerCase();
+    const location = locationFilter.value.toLowerCase();
+    const urgency = urgencyFilter.value.toLowerCase();
+    const search = searchInput.value.toLowerCase();
+
+    let visibleCount = 0;
+
+    requestCards.forEach((card) => {
+      const cardCategory = card.dataset.category;
+      const cardLocation = card.dataset.location;
+      const cardUrgency = card.dataset.urgency;
+      const cardText = card.textContent.toLowerCase();
+
+      const categoryMatch = !category || cardCategory.toLowerCase().includes(category);
+      const locationMatch = !location || cardLocation.toLowerCase().includes(location);
+      const urgencyMatch = !urgency || cardUrgency.toLowerCase().includes(urgency);
+      const searchMatch = !search || cardText.includes(search);
+
+      if (categoryMatch && locationMatch && urgencyMatch && searchMatch) {
+        card.style.display = "block";
+        visibleCount++;
+      } else {
+        card.style.display = "none";
       }
+    });
 
-      // Add event listeners
-      categoryFilter.addEventListener("change", filterRequests);
-      locationFilter.addEventListener("change", filterRequests);
-      urgencyFilter.addEventListener("change", filterRequests);
-      searchInput.addEventListener("input", filterRequests);
+    resultsCount.textContent = visibleCount;
+  }
 
-      // View toggle functionality
-      const viewToggleButtons = document.querySelectorAll(
-        ".view-toggle button"
-      );
-      const requestsContainer = document.getElementById("requests-container");
+  // Add event listeners
+  categoryFilter.addEventListener("change", filterRequests);
+  locationFilter.addEventListener("change", filterRequests);
+  urgencyFilter.addEventListener("change", filterRequests);
+  searchInput.addEventListener("input", filterRequests);
 
-      viewToggleButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          viewToggleButtons.forEach((btn) => btn.classList.remove("active"));
-          button.classList.add("active");
+  // View toggle functionality
+  const viewToggleButtons = document.querySelectorAll(".view-toggle button");
+  const requestsContainer = document.getElementById("requests-container");
 
-          if (button.dataset.view === "list") {
-            requestsContainer.style.gridTemplateColumns = "1fr";
-            requestsContainer.style.gap = "1rem";
-          } else {
-            requestsContainer.style.gridTemplateColumns =
-              "repeat(auto-fit, minmax(350px, 1fr))";
-            requestsContainer.style.gap = "2rem";
-          }
-        });
-      });
+  viewToggleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      viewToggleButtons.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
 
-      // Click handler for request cards
-      requestCards.forEach((card) => {
-        card.addEventListener("click", (e) => {
-          if (!e.target.classList.contains("btn")) {
-            window.location.href = "#";
-          }
-        });
-      });
+      if (button.dataset.view === "list") {
+        requestsContainer.style.gridTemplateColumns = "1fr";
+        requestsContainer.style.gap = "1rem";
+      } else {
+        requestsContainer.style.gridTemplateColumns = "repeat(auto-fit, minmax(350px, 1fr))";
+        requestsContainer.style.gap = "2rem";
+      }
+    });
+  });
 
-      // Pagination functionality (basic)
-      const paginationButtons = document.querySelectorAll(".pagination button");
-      paginationButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          if (button.textContent.match(/\d+/)) {
-            paginationButtons.forEach((btn) => btn.classList.remove("active"));
-            button.classList.add("active");
-          }
-        });
-      });
+  // Click handler for request cards
+  requestCards.forEach((card) => {
+    card.addEventListener("click", (e) => {
+      if (!e.target.classList.contains("btn") && !e.target.classList.contains("author-link")) {
+        // Navigate to request detail
+      }
+    });
+  });
 
-
-      // Initialize count
-      filterRequests();
-    </script>
-  </body>
-</html>
-
+  // Initialize count
+  filterRequests();
+</script>
 {% endblock %}
