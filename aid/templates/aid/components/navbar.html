@@ -1,14 +1,14 @@
 {% load static %}
-
+{%block content%}
 <nav class="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
     <div class="container mx-auto px-4">
         <div class="flex h-16 items-center justify-between">
             <!-- Logo -->
             <a href="{% url 'aid:home' %}" class="flex items-center space-x-2">
-                <div class="h-8 w-8 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center">
-                    <span class="text-white font-bold text-sm">RQ</span>
+                <div class="h-10 w-10 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center">
+                    <img src="{% static "img/img.png" %}" alt="" class="h-10 w-10 rounded-full bg flex items-center justify-center">
                 </div>
-                <span class="font-bold text-xl text-gray-900">RequestHub</span>
+                <span class="font-bold text-xl text-gray-900">Neighborly</span>
             </a>
 
             <!-- Desktop Navigation -->
@@ -45,7 +45,7 @@
                     <span>Inbox</span>
                 </a>
                 
-                <a href="#" 
+                <a href="{% url 'aid:about'%}" 
                    class="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-gray-900 hover:bg-gray-100">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -67,7 +67,15 @@
                 <!-- User Profile Dropdown -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center text-sm rounded-full hover:bg-gray-100 p-1 transition-colors">
-                        <img class="h-10 w-10 rounded-full object-cover" src="{{profilee.profile_picture.url}}" alt="User">
+                        {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" 
+                             alt="{{ profile.user }}" 
+                             class="w-10 h-10 rounded-full object-cover border-4 border-gray-200">
+                    {% else %}
+                    <img src="{% static "img/img.png" %}" alt="" class="h-10 w-10 rounded-full bg flex items-center justify-center">
+                    
+                        
+                    {% endif %}
                     </button>
                     
                     <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
@@ -155,7 +163,7 @@
                     </svg>
                     <span>Inbox</span>
                 </a>
-                <a href="#" class="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+                <a href="{% url 'aid:about'%}" class="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -168,3 +176,4 @@
 
 <!-- Alpine.js for dropdown functionality -->
 <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+{%endblock%}

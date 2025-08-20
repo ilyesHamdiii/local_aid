@@ -90,6 +90,7 @@ def my_requests(request):
         "total_responses": total_responses,
     }
     return render(request, "aid/my_requests.html", context)
+@login_required
 
 def profile_user_view(request, request_author):
     """View for displaying user profiles"""

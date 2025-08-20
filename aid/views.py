@@ -8,16 +8,21 @@ from django.contrib import messages
 
 
 def base_view(request):
-    if not request.user.is_authenticated:
-        return redirect("user:login")
-    nb = Request.objects.filter(author=request.user).first()
-    profile = UserProfile.objects.filter(user=request.user).first()
-    print("profile", profile)
-    return render(request, 'aid/base.html', {"profile": profile})
+    picture=UserProfile.objects.filter(user=request.user).first()
+    print("picture",picture)
+    
+    return render(request, 'aid/base.html', {"profile":picture})
 
 def home_view(request):
-    return render(request, "aid/home.html")
+    if request.user.is_authenticated:
+        picture=UserProfile.objects.filter(user=request.user).first()
+    else:
+        picture={}
 
+    return render(request, "aid/home.html",{"profile":picture})
+
+
+@login_required
 def request_detail_view(request, request_id):
     try:
         request_detail = Request.objects.get(id=request_id)
@@ -29,13 +34,13 @@ def request_detail_view(request, request_id):
         "profile":profile
     }
     return render(request, 'aid/request_detail.html', context)
-
+@login_required
 def request_not_found_view(request, request_id):
     context = {
         'request_id': request_id,
     }
     return render(request, 'aid/request_detail.html')
-
+@login_required
 def post_request_view(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -80,35 +85,43 @@ def post_request_view(request):
             return render(request, 'aid/post_request.html')
     
     # Get categories and locations for the form
+    picture=UserProfile.objects.filter(user=request.user).first()
+
     categories = Category.objects.all()
     locations = Location.objects.all()
     context = {
         'categories': categories,
         'locations': locations,
+        "profile":picture
     }
     return render(request, 'aid/post.html', context)
-
+@login_required
 def requests(request):
     requests = Request.objects.all()
     categories = Category.objects.all()
     locations = Location.objects.all()
+    picture=UserProfile.objects.filter(user=request.user).first()
+
     profile = UserProfile.objects.filter(user=request.user).first()
     context = {
         'requests': requests,
         'categories': categories,
         'locations': locations,
-        "profile": profile
+        "profile": picture
     }
     print(categories)
     print("context",context)
     return render(request, 'aid/requests.html', context)
-
+@login_required
 def requests_list(request):
     requests = Request.objects.all().order_by('-time_posted')
     paginator = Paginator(requests, 6)  # 6 requests per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'aid/requests.html', {'page_obj': page_obj})
+    profile = UserProfile.objects.filter(user=request.user).first()
+
+    
+    return render(request, 'aid/requests.html', {'page_obj': page_obj,"profile":profile})
 
 @login_required
 def edit_request(request, request_id):
@@ -172,6 +185,8 @@ def my_requests(request):
     # Calculate stats
     total_requests = user_requests.count()
     open_requests = user_requests.filter(status='open').count()
+    profile = UserProfile.objects.filter(user=request.user).first()
+
     completed_requests = user_requests.filter(status='closed').count()
     total_responses = 0  # You'll need to implement this based on your response model
     
@@ -181,5 +196,8 @@ def my_requests(request):
         "open_requests": open_requests,
         "completed_requests": completed_requests,
         "total_responses": total_responses,
+        "profile":profile
     }
     return render(request, "aid/my_requests.html", context)
+def about(request):
+    return render(request,"aid/about.html")

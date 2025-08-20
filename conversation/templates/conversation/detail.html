@@ -12,12 +12,13 @@
 
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden" style="height: 70vh;">
             <!-- Messages Container -->
-            <div id="messages" class="flex-1 overflow-y-auto p-6 space-y-4" style="height: calc(70vh - 80px);">
+            <div id="messages" class="flex-1 overflow-y-auto p-6 space-y-4" style="height: calc(63vh - 80px);">
                 {% for message in conversation.messages.all %}
                     <div class="flex items-end space-x-3 {% if message.created_by == request.user %}flex-row-reverse space-x-reverse{% endif %}">
                         <!-- Avatar -->
-                        <a href="{% url 'user:profile' %}" class="flex-shrink-0">
+                        {% comment %} <a href="{% url 'user:profile_view' sender.user %}" class="flex-shrink-0"> {% endcomment %}
                             {% if message.created_by == request.user %}
+                                <a href="{% url 'user:profile_view' request.user %}" class="flex-shrink-0">
                                 {% if sender.profile_picture %}
                                     <img src="{{ sender.profile_picture.url }}" alt="{{ message.created_by.username }}" class="w-10 h-10 rounded-full object-cover">
                                 {% else %}
@@ -25,7 +26,10 @@
                                         {{ message.created_by.username|first|upper }}
                                     </div>
                                 {% endif %}
+                                </a>
                             {% else %}
+                            {% comment %} <a href="{% url 'user:profile_view' sender.user %}" class="flex-shrink-0"> {% endcomment %}
+                                <a href="{% url 'user:profile_view' receiver.user %}" class="flex-shrink-0">
                                 {% if receiver.profile_picture %}
                                     <img src="{{ receiver.profile_picture.url }}" alt="{{ message.created_by.username }}" class="w-10 h-10 rounded-full object-cover">
                                 {% else %}
@@ -33,8 +37,9 @@
                                         {{ message.created_by.username|first|upper }}
                                     </div>
                                 {% endif %}
+                                </a>
                             {% endif %}
-                        </a>
+                        {% comment %} </a> {% endcomment %}
 
                         <!-- Message Bubble -->
                         <div class="max-w-xs lg:max-w-md">
@@ -58,7 +63,7 @@
                     <div class="flex-1">
                         {{ form.content }}
                     </div>
-                    <button type="submit" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 flex items-center space-x-2">
+                    <button type="submit" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 flex items-center space-x-2 ">
                         <span>Send</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
@@ -95,6 +100,10 @@
     
     #id_content::placeholder {
         color: #9ca3af;
+    }
+    button{
+        position: relative;
+        bottom: 50px;
     }
 </style>
 

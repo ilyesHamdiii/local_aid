@@ -76,6 +76,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'local.wsgi.application'
+# settings.py
+
+LOGIN_URL = '/login'  # the URL path to your login view
+
 
 
 # Database

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path,include
-from .views import  home_view, request_detail_view, post_request_view, requests_list,base_view,edit_request,delete_request,my_requests
+from .views import  home_view, request_detail_view, post_request_view, requests_list,base_view,edit_request,delete_request,my_requests,about
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -17,6 +17,8 @@ urlpatterns = [
     path('edit/<int:request_id>', edit_request, name='edit_request'),
     path('request/<int:request_id>/delete/', delete_request, name='delete_request'),
     path('my-requests/', my_requests, name='my_requests'),
+    path('about/', about, name='about'),
+
 ]
 
 if settings.DEBUG:
