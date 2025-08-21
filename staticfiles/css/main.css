@@ -1,0 +1,130 @@
+:root {
+  --accent: #2b7a78;
+  --muted: #666;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: Inter, system-ui, Arial;
+  margin: 0;
+  color: #111;
+  line-height: 1.4;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.site-header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+.brand {
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+}
+.nav a {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: var(--muted);
+}
+.hero {
+  padding: 2rem 0;
+  text-align: center;
+}
+.hero h1 {
+  margin: 0 0 0.25rem;
+  font-size: 2rem;
+}
+.btn {
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+}
+.btn.ghost {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: inherit;
+}
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.card {
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  text-align: center;
+}
+.listings {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+.listing {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border-bottom: 1px solid #f2f2f2;
+}
+.listing a {
+  color: inherit;
+  text-decoration: none;
+  flex: 1;
+}
+.meta {
+  color: #888;
+  font-size: 0.875rem;
+}
+.request-detail img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 1rem;
+  border-radius: 6px;
+}
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+.actions {
+  margin-top: 1rem;
+}
+.site-footer {
+  border-top: 1px solid #eee;
+  padding: 1rem;
+  margin-top: 2rem;
+  text-align: center;
+  color: #777;
+}
+@media (max-width: 600px) {
+  .nav a {
+    display: none;
+  }
+}
