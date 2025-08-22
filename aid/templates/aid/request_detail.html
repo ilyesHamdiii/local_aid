@@ -185,9 +185,12 @@
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">Offer to Help</h3>
                     <p class="text-gray-600 mb-6">Want to help {{ request.author.username }} with this request? Send a message to get started.</p>
-                    <button onclick="showOfferModal()" class="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 btn-hover transition-all duration-300">
+                    <a href="{% url 'conversation:new' request.author.id %}">
+
+                    <button onclick="" class="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 btn-hover transition-all duration-300">
                         Offer Your Help
                     </button>
+                    </a>
                 </div>
 
                 <!-- Requester Info -->
@@ -229,7 +232,8 @@
     <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-auto">
         <h3 class="text-xl font-semibold text-gray-900 mb-4">Offer Your Help</h3>
         <p class="text-gray-600 mb-6">Send a message to {{ request.author.username }} explaining how you can help with this request.</p>
-        <form id="offer-form">
+        <form id="offer-form" method="post" action="{% url 'conversation:send_message' request.author.id %}">
+            {% csrf_token %}
             <textarea placeholder="Hi {{ request.author.username }}! I'd love to help with your grocery shopping request..." 
                       class="w-full min-h-32 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y mb-4"
                       required></textarea>
@@ -240,6 +244,7 @@
                 <button type="submit" class="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300">
                     Send Offer
                 </button>
+                </a>
             </div>
         </form>
     </div>

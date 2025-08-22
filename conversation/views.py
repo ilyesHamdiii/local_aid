@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from dashboard.views import index
 from user.models import UserProfile
+from django.contrib.auth.models import User
 
 from aid.models import Request
 
@@ -63,13 +64,20 @@ def inbox(request):
     requests = Request.objects.filter(author=request.user)
     picture=UserProfile.objects.filter(user=request.user).first()
     print("conversations", conversations)
+    if profile is not None: 
 
-    return render(request, 'conversation/inbox.html', {
-        'conversations': conversations,
-        'requests': requests,
-        "profilee": profile,
-        "profile": picture,
-    })
+        return render(request, 'conversation/inbox.html', {
+            'conversations': conversations,
+            'requests': requests,
+            "profilee": profile,
+            "profile": picture,
+        })
+    else:
+        return render(request, 'conversation/inbox.html', {
+            'conversations': conversations,
+            'requests': requests,
+            "profile": picture,
+        })
 
 @login_required
 def detail(request, pk):
@@ -106,4 +114,39 @@ def detail(request, pk):
         'form': form,
         'sender':sender,
         "receiver":receiverr,
+    })
+@login_required
+def send_message(request, receiver_id):
+    receiver = get_object_or_404(User, pk=receiver_id)
+
+    if request.method == "POST":
+        form = ConversationMessageForm(request.POST)
+        if form.is_valid():
+            # Check if conversation already exists
+            conversation = (
+                Conversation.objects
+                .filter(members=request.user)
+                .filter(members=receiver)
+                .first()
+            )
+            conversation.save()
+            if not conversation:
+                conversation = Conversation.objects.create(item=None)
+                conversation.members.add(request.user, receiver)
+                conversation.save()
+
+            message = form.save(commit=False)
+            message.conversation = conversation
+            message.created_by = request.user
+            message.save()
+
+            return redirect("conversation:detail",pk=conversation.pk)
+
+    else:
+        form = ConversationMessageForm()
+    print("no form")
+
+    return render(request, "aid/home.html", {
+        "form": form,
+        "receiver": receiver,
     })

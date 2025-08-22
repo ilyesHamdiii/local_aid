@@ -10,6 +10,7 @@ urlpatterns = [
     path('<int:pk>/', views.detail, name='detail'),
     path('new/<int:item_pk>/', views.new_conversation, name='new'),
     path('', include('dashboard.urls')),
+    path("send/<int:receiver_id>/", views.send_message, name="send_message"),
     
     
 ]
