@@ -29,9 +29,11 @@ def request_detail_view(request, request_id):
     except Request.DoesNotExist:
         return render(request, 'aid/request_not_found.html', {'request_id': request_id})
     profile=UserProfile.objects.filter(user=request_detail.author).first()
+    user=UserProfile.objects.filter(user=request.user).first()
     context = {
-        'request': request_detail,
-        "profile":profile
+        'req': request_detail,
+        "profilee":profile,
+        "profile":user
     }
     return render(request, 'aid/request_detail.html', context)
 @login_required
@@ -200,4 +202,5 @@ def my_requests(request):
     }
     return render(request, "aid/my_requests.html", context)
 def about(request):
-    return render(request,"aid/about.html")
+    profile=UserProfile.objects.filter(user=request.user).first()
+    return render(request,"aid/about.html",{"profile":profile})

@@ -56,14 +56,6 @@
 
             <!-- User Profile & Actions -->
             <div class="flex items-center space-x-3">
-                <!-- Notifications -->
-                <button class="relative inline-flex items-center justify-center w-10 h-10 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5-5v5zM12 3v4m0 0V3m0 4h7m-7 0H5"></path>
-                    </svg>
-                    <span class="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
-                </button>
-
                 <!-- User Profile Dropdown -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center text-sm rounded-full hover:bg-gray-100 p-1 transition-colors">

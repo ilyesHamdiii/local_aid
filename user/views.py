@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login , logout
@@ -11,6 +11,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import UserProfile
 from aid.models import Request
+from conversation.models import Conversation
 
 # Create your views here.
 
@@ -53,7 +54,12 @@ def logout_view(request):
     return redirect("aid:home")
 @login_required
 def profile_view(request):
+
+
     if request.method == "POST":
+        
+
+
         user_profile = UserProfile.objects.get(user=request.user)
         user_profile.location = request.POST.get("location", user_profile.location)
         user_profile.phone_number = request.POST.get("phone_number", user_profile.phone_number)
@@ -97,6 +103,9 @@ def profile_user_view(request, request_author):
     from django.contrib.auth.models import User
     from django.shortcuts import get_object_or_404
     pid=User.objects.filter(username=request_author).first()
+    """ req=Request.objects.filter(id=pid).firs() """
+    conversations = Conversation.objects.filter(members=[pid.id]).filter(members__in=[request.user.id])
+    print("conversation :",conversations.id)
     
     profile_user = get_object_or_404(UserProfile, user=pid.id)
     
@@ -124,6 +133,7 @@ def profile_user_view(request, request_author):
         'user_requests': user_requests,
         'user_reviews': user_reviews,
         'user_stats': user_stats,
+        "conversation":conversations
     }
     
     return render(request,"user/profile_view.html",context)

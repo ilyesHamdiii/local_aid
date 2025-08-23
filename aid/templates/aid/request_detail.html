@@ -1,7 +1,7 @@
 {% extends "aid/base.html" %}
 {% load static %}
 
-{% block title %}{{ request.title }} - RequestHub{% endblock %}
+{% block title %}{{ req.title }} - RequestHub{% endblock %}
 
 {% block content %}
 <main class="py-8">
@@ -25,7 +25,7 @@
                         <svg class="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                         </svg>
-                        <span class="text-gray-500">{{ request.title|truncatechars:50 }}</span>
+                        <span class="text-gray-500">{{ req.title|truncatechars:50 }}</span>
                     </div>
                 </li>
             </ol>
@@ -39,41 +39,41 @@
                     <div class="mb-6">
                         <div class="flex items-center justify-between mb-4">
                             <span class="px-3 py-1 text-sm font-medium rounded-full 
-                                   {% if request.category == 'Errands' %}bg-green-100 text-green-800
-                                   {% elif request.category == 'Moving' %}bg-yellow-100 text-yellow-800
-                                   {% elif request.category == 'Pet care' %}bg-blue-100 text-blue-800
-                                   {% elif request.category == 'Tech Help' %}bg-purple-100 text-purple-800
-                                   {% elif request.category == 'Food and meals' %}bg-orange-100 text-orange-800
+                                   {% if req.category == 'Errands' %}bg-green-100 text-green-800
+                                   {% elif req.category == 'Moving' %}bg-yellow-100 text-yellow-800
+                                   {% elif req.category == 'Pet care' %}bg-blue-100 text-blue-800
+                                   {% elif req.category == 'Tech Help' %}bg-purple-100 text-purple-800
+                                   {% elif req.category == 'Food and meals' %}bg-orange-100 text-orange-800
                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
-                                {{ request.category }}
+                                {{ req.category }}
                             </span>
                             <div class="flex items-center space-x-2">
                                 <div class="flex items-center">
                                     <div class="w-2 h-2 rounded-full mr-2 
-                                          {% if request.urgency_level == 'high' %}bg-red-500
-                                          {% elif request.urgency_level == 'medium' %}bg-yellow-500
+                                          {% if req.urgency_level == 'high' %}bg-red-500
+                                          {% elif req.urgency_level == 'medium' %}bg-yellow-500
                                           {% else %}bg-green-500{% endif %}"></div>
-                                    <span class="text-sm text-gray-600 capitalize">{{ request.urgency_level }} Priority</span>
+                                    <span class="text-sm text-gray-600 capitalize">{{ req.urgency_level }} Priority</span>
                                 </div>
                                 <span class="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Open</span>
                             </div>
                         </div>
 
-                        <h1 class="text-3xl font-bold text-gray-900 mb-4 leading-tight">{{ request.title }}</h1>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-4 leading-tight">{{ req.title }}</h1>
                         
                         <div class="flex flex-wrap items-center gap-6 text-sm text-gray-600 mb-4">
                             <div class="flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                Posted {{ request.created_at|timesince }} ago
+                                Posted {{ req.created_at|timesince }} ago
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
-                                {{ request.location }}
+                                {{ req.location }}
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,29 +86,29 @@
 
                     <!-- Description -->
                     <div class="mb-8">
-                        <p class="text-lg text-gray-700 leading-relaxed">{{ request.description }}</p>
+                        <p class="text-lg text-gray-700 leading-relaxed">{{ req.description }}</p>
                     </div>
 
                     <!-- Request Details -->
                     <div class="bg-gray-50 rounded-xl p-6 mb-8">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Request Details</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {% if request.preferred_time %}
+                            {% if req.preferred_time %}
                             <div>
                                 <div class="text-sm font-medium text-gray-900 mb-1">Preferred Time</div>
-                                <div class="text-gray-600">{{ request.preferred_time }}</div>
+                                <div class="text-gray-600">{{ req.preferred_time }}</div>
                             </div>
                             {% endif %}
-                            {% if request.estimated_duration %}
+                            {% if req.estimated_duration %}
                             <div>
                                 <div class="text-sm font-medium text-gray-900 mb-1">Duration</div>
-                                <div class="text-gray-600">{{ request.estimated_duration }}</div>
+                                <div class="text-gray-600">{{ req.estimated_duration }}</div>
                             </div>
                             {% endif %}
-                            {% if request.offer %}
+                            {% if req.offer %}
                             <div>
                                 <div class="text-sm font-medium text-gray-900 mb-1">Compensation</div>
-                                <div class="text-gray-600">{{ request.offer }}</div>
+                                <div class="text-gray-600">{{ req.offer }}</div>
                             </div>
                             {% endif %}
                             <div>
@@ -119,11 +119,11 @@
                     </div>
 
                     <!-- Photos -->
-                    {% if request.photo %}
+                    {% if req.photo %}
                     <div class="mb-8">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Photos</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <img src="{{ request.photo.url }}" alt="Request photo" 
+                            <img src="{{ req.photo.url }}" alt="Request photo" 
                                  class="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
                                  onclick="openLightbox(this.src)">
                         </div>
@@ -184,29 +184,38 @@
                 <!-- Offer Help -->
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">Offer to Help</h3>
-                    <p class="text-gray-600 mb-6">Want to help {{ request.author.username }} with this request? Send a message to get started.</p>
-                    <a href="{% url 'conversation:new' request.author.id %}">
+                    <p class="text-gray-600 mb-6">Want to help {{ req.author.username }} with this req? Send a message to get started.</p>
+                    {%if request.user == req.author%}
+                    <a href="{% url 'aid:my_requests'  %}">
+
+                    <button onclick="" class="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 btn-hover transition-all duration-300">
+                        My requests
+                    </button>
+                    {%else%}
+                    <a href="{% url 'conversation:new' conversations.id%}">
 
                     <button onclick="" class="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 btn-hover transition-all duration-300">
                         Offer Your Help
                     </button>
                     </a>
+                    {%endif%}
                 </div>
 
                 <!-- Requester Info -->
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Posted by</h3>
                     <div class="flex items-center space-x-3 mb-4">
-                        <a href="{% url 'user:profile_view' request.author%}">x</a>
-                        {% if profile.profile_picture %}
-                            <img src="{{ profile.profile_picture.url }}" alt="{{ request.author.username }}" class="w-12 h-12 rounded-full object-cover">
+                        <a href="{% url 'user:profile_view' req.author%}">
+                        {% if profilee.profile_picture %}
+                            <img src="{{ profilee.profile_picture.url }}" alt="{{ req.author.username }}" class="w-12 h-12 rounded-full object-cover">
                         {% else %}
                             <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
-                                {{ request.author.username|first|upper }}
+                                {{ req.author.username|first|upper }}
                             </div>
                         {% endif %}
+                        </a>
                         <div>
-                            <div class="font-medium text-gray-900">{{ request.author.username }}</div>
+                            <div class="font-medium text-gray-900">{{ req.author.username }}</div>
                             <div class="text-sm text-gray-600">⭐ 5.0 rating • Member since 2023</div>
                         </div>
                     </div>
@@ -216,7 +225,7 @@
                 <!-- Location Info -->
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Location</h3>
-                    <p class="text-gray-900 mb-2"><strong>📍 {{ request.location }}</strong></p>
+                    <p class="text-gray-900 mb-2"><strong>📍 {{ req.location }}</strong></p>
                     <p class="text-sm text-gray-600 mb-4">Near Main Street and 5th Avenue</p>
                     <div class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
                         <span>Interactive Map</span>
@@ -231,10 +240,10 @@
 <div id="offer-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-auto">
         <h3 class="text-xl font-semibold text-gray-900 mb-4">Offer Your Help</h3>
-        <p class="text-gray-600 mb-6">Send a message to {{ request.author.username }} explaining how you can help with this request.</p>
-        <form id="offer-form" method="post" action="{% url 'conversation:send_message' request.author.id %}">
+        <p class="text-gray-600 mb-6">Send a message to {{ req.author.username }} explaining how you can help with this req.</p>
+        <form id="offer-form" method="post" action="{% url 'conversation:send_message' req.author.id %}">
             {% csrf_token %}
-            <textarea placeholder="Hi {{ request.author.username }}! I'd love to help with your grocery shopping request..." 
+            <textarea placeholder="Hi {{ req.author.username }}! I'd love to help with your grocery shopping req..." 
                       class="w-full min-h-32 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y mb-4"
                       required></textarea>
             <div class="flex space-x-3">
@@ -296,7 +305,7 @@
         submitBtn.textContent = 'Sending...';
         
         setTimeout(() => {
-            alert('Your offer has been sent to {{ request.author.username }}! They will be notified and can respond to you directly.');
+            alert('Your offer has been sent to {{ req.author.username }}! They will be notified and can respond to you directly.');
             hideOfferModal();
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
@@ -322,7 +331,7 @@
     // Accept help functionality
     document.querySelectorAll('button:contains("Accept Help")').forEach(btn => {
         btn.addEventListener('click', function() {
-            if (confirm('Are you sure you want to accept this person\'s help? This will notify them and mark the request as in progress.')) {
+            if (confirm('Are you sure you want to accept this person\'s help? This will notify them and mark the req as in progress.')) {
                 const responseCard = this.closest('.bg-white');
                 const responderName = responseCard.querySelector('.font-medium').textContent;
                 
