@@ -12,7 +12,7 @@ A Django-powered backend API for a community platform that connects people who n
 
 ## 🤔 Why Neighborly?
 
-In today's fast-paced world, communities often feel disconnected despite being more digitally connected than ever. People struggle with everyday tasks while their neighbors have the exact skills and time to help, but there's no efficient way to bridge this gap.
+In today's fast-paced world, communities often feel disconnected despite being more digitally connected than ever. People struggle with everyday tasks while their neighbors have the exact skills and time to help, but there's no efficient way to bridge this gap .   
 
 ### The Problem We Solve
 
@@ -65,10 +65,10 @@ By sharing resources and skills locally, we reduce waste, travel, and environmen
 
 ### What Drives Us Daily
 
-- **Impact Stories**: Every successful connection reminds us why this matters
-- **Community Feedback**: Users sharing how Neighborly changed their neighborhood experience
-- **Growth Metrics**: Seeing organic community growth and repeat usage
-- **Problem Solving**: Continuously improving how people connect and help each other
+- **Impact Stories**: Every successful connection reminds us why this matters .
+- **Community Feedback**: Users sharing how Neighborly changed their neighborhood experience .
+- **Growth Metrics**: Seeing organic community growth and repeat usage .
+- **Problem Solving**: Continuously improving how people connect and help each other .
 
 ### Our Long-term Mission
 
