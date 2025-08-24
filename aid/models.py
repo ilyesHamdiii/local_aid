@@ -28,7 +28,7 @@ class Request(models.Model):
     estimated_duration = models.CharField(max_length=50, blank=True, null=True)
     skills = models.CharField(max_length=50, blank=True, null=True)
     offer = models.TextField(blank=True, null=True)
-    photo = models.URLField(blank=True, null=True)
+    photo = models.ImageField(upload_to='requests_pictures/', blank=True, null=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
     time_posted = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')

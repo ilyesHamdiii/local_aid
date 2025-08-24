@@ -104,8 +104,9 @@ def profile_user_view(request, request_author):
     from django.shortcuts import get_object_or_404
     pid=User.objects.filter(username=request_author).first()
     """ req=Request.objects.filter(id=pid).firs() """
-    conversations = Conversation.objects.filter(members=[pid.id]).filter(members__in=[request.user.id])
-    print("conversation :",conversations.id)
+    conversations = Conversation.objects.filter(members=pid.id).filter(members__in=[request.user.id])
+    conversation=conversations.first()
+    print("conversation :",conversation.id)
     
     profile_user = get_object_or_404(UserProfile, user=pid.id)
     
@@ -133,7 +134,7 @@ def profile_user_view(request, request_author):
         'user_requests': user_requests,
         'user_reviews': user_reviews,
         'user_stats': user_stats,
-        "conversation":conversations
+        "conversation":conversation
     }
     
     return render(request,"user/profile_view.html",context)

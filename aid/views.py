@@ -5,6 +5,8 @@ from user.models import UserProfile
 from django.contrib.auth.decorators import login_required 
 from django.http import HttpResponse
 from django.contrib import messages
+from conversation.models import Conversation
+from django.contrib.auth.models import User
 
 
 def base_view(request):
@@ -30,10 +32,17 @@ def request_detail_view(request, request_id):
         return render(request, 'aid/request_not_found.html', {'request_id': request_id})
     profile=UserProfile.objects.filter(user=request_detail.author).first()
     user=UserProfile.objects.filter(user=request.user).first()
+    request_author=Request.objects.filter(id=request_id).first()
+    print("request_author",request_author.author)
+    pid=User.objects.filter(username=request_author.author).first()
+    conversations = Conversation.objects.filter(members=pid.id).filter(members__in=[request.user.id])
+    conversation=conversations.first()
+    print("conversation :",conversation.id)
     context = {
         'req': request_detail,
         "profilee":profile,
-        "profile":user
+        "profile":user,
+        "conversation":conversation
     }
     return render(request, 'aid/request_detail.html', context)
 @login_required

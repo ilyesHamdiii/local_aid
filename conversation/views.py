@@ -16,10 +16,13 @@ def new_conversation(request, item_pk):
 
     if item.author == request.user:
         items = Request.objects.filter(author=request.user)
+        print("request",request)
+        print("item author",item.author)
+        print("item user",request.user)
 
-        return render(request, 'dashboard/index.html', {
-            'Requests': items,
-        })
+
+        return redirect("conversation:my_requests")
+    
     conversations = Conversation.objects.filter(item=item).filter(members__in=[request.user.id])
 
     if conversations:
